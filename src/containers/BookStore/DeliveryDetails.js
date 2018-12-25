@@ -27,14 +27,12 @@ const DeliveryDetails = ({deliveryOption, updateFormData}) => {
 }
 
 const handleChange = (event, updateFormData, deliveryOption) => {
-  //console.log('handleChange val', event.target.value)
   updateFormData({deliveryOption: event.target.value})
 }
 
 const handleSubmit = (event, updateFormData, deliveryOption) => {
-  console.log('handleSubmit deliveryOption', deliveryOption)
   event.preventDefault()
-  updateFormData({deliveryOption: deliveryOption})
+  updateFormData({error: ""})
 }
 
 export default DeliveryDetails

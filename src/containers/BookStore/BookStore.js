@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import BookList from './BookList';
-import ShippingDetails from './ShippingDetails';
-import DeliveryDetails from './DeliveryDetails';
-import './BookStore.css';
+import React, { Component } from 'react'
+import BookList from './BookList'
+import ShippingDetails from './ShippingDetails'
+import DeliveryDetails from './DeliveryDetails'
+import Confirmation from './Confirmation'
+import './BookStore.css'
 
 class BookStore extends Component {
   state = {
@@ -35,7 +36,10 @@ class BookStore extends Component {
           step === 3 ?
             <DeliveryDetails updateFormData={this.updateFormData} deliveryOption={deliveryOption} />
           :
-            null
+          step === 4 ?
+            <Confirmation updateFormData={this.updateFormData} />
+          :
+            <BookList updateFormData={this.updateFormData} books={books} selectedBooks={selectedBooks} error={error} />
         }
       </div>
     )
