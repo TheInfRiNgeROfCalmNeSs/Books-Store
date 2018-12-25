@@ -46,7 +46,6 @@ const handleSubmit = (event, updateFormData, fullName, contactNumber, shippingAd
 	event.preventDefault()
 	if(validateInput(updateFormData, fullName, contactNumber, shippingAddress)) {
 	  updateFormData({ fullName: fullName, contactNumber: contactNumber, shippingAddress: shippingAddress, error: "" })
-	  console.log('CAN!')
 	}
 }
 
