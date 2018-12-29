@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 //import './BookList.css';
 
-const BookList = ({ updateFormData, books, selectedBooks, error }) => (
+const BookList = ({ updateFormData, books, selectedBooks, error, showTimeoutMessage }) => (
 	<Fragment>
       	<h3>Choose from wide variety of books available in our store</h3>
 		{renderError(error)}
-		<form onSubmit={(e) => handleSubmit(e, updateFormData, selectedBooks, error)}>
+		<form onSubmit={(e) => handleSubmit(e, updateFormData, selectedBooks, error, showTimeoutMessage)}>
 			{
 				books.map((book) => renderBook(updateFormData, book, selectedBooks))
 			}
@@ -47,14 +47,14 @@ const handleSelectBooks = (event, updateFormData, selectedBooks, book) => {
 	updateFormData({book: book})
 }
 
-const handleSubmit = (event, updateFormData, selectedBooks, error) => {
+const handleSubmit = (event, updateFormData, selectedBooks, error, showTimeoutMessage) => {
   	event.preventDefault()
 	if(selectedBooks.length === 0) {
 	  error = "Please choose at least one book to continue";
 	} else {
 	  error = ""
 	}
-  	updateFormData({selectedBooks: selectedBooks, error: error})
+  	updateFormData({selectedBooks: selectedBooks, error: error, showTimeoutMessage: error!==""?false:true})
 }
 
 export default BookList;

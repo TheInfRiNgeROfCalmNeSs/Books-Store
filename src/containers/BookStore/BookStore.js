@@ -21,7 +21,8 @@ class BookStore extends PureComponent {
     shippingAddress: "",
     deliveryOption: "Primary",
     timerId: null,
-    timer: 60*2
+    timer: 60*0.25,
+    showTimeoutMessage: false
   }
 
   componentDidMount() {
@@ -38,7 +39,7 @@ class BookStore extends PureComponent {
       this.setState({ step: 1, timerId: null })
       localStorage.setItem('step', 1)
     }
-    if(this.state.timerId===null && this.state.timer===60*2) {
+    if(this.state.timerId===null && this.state.timer===60*0.25) {
       if(this.state.step > 1 && this.state.step < 5) {
         this.setState({timerId: setInterval(() => this.setState({timer: this.state.timer - 1}), 1000)})
       }
@@ -48,7 +49,7 @@ class BookStore extends PureComponent {
 
   componentDidUpdate(a, b, c) {
     if(b.timer===0) {
-      this.setState({timer: 60*2})
+      this.setState({timer: 60*0.25})
     }
   }
 
@@ -57,7 +58,7 @@ class BookStore extends PureComponent {
   }
 
   render() {
-    const { books, selectedBooks, step, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId } = this.state
+    const { books, selectedBooks, step, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage } = this.state
     let minutes = parseInt(timer/60, 10)
     let seconds = parseInt(timer%60, 10)
     minutes = minutes.toString().length<2?`0${minutes}`:minutes
@@ -67,7 +68,7 @@ class BookStore extends PureComponent {
       <div className="App">
         {
           step === 1 ?
-            <BookList updateFormData={this.updateFormData} books={books} selectedBooks={selectedBooks} error={error} />
+            <BookList updateFormData={this.updateFormData} books={books} selectedBooks={selectedBooks} error={error} showTimeoutMessage={showTimeoutMessage} />
           :
           step === 2 ?
             <ShippingDetails updateFormData={this.updateFormData} error={error} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress}  />
@@ -85,7 +86,10 @@ class BookStore extends PureComponent {
         }
         {
           this.state.step > 1 && this.state.step < 5 ?
-            <div className="timer">{`${minutes}:${seconds}`}</div>
+            <div className="timer">{`You have ${minutes} Minutes, ${seconds} Seconds, before confirming order`}</div>
+          :
+          this.state.step === 1 && this.state.timerId === null && showTimeoutMessage ?
+            <div className="timer-message">{"Your shopping time is out, please try again to confirm your order!"}</div>
           :
             null
         }
@@ -94,7 +98,7 @@ class BookStore extends PureComponent {
   }
 
   updateFormData = (formData) => {
-    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, book } = formData
+    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, book, showTimeoutMessage } = formData
     localStorage.setItem('step', error===""?(step!==undefined?step:this.state.step) + 1:this.state.step)
     const newStateBook = this.state.books.map((stateBook) => {
       if(book && stateBook.id === book.id) {
@@ -102,7 +106,7 @@ class BookStore extends PureComponent {
       }
       return stateBook
     })
-    this.setState({ step: parseInt(localStorage.step, 10), selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks, error: error, fullName: fullName!==undefined?fullName:this.state.fullName, contactNumber: contactNumber!==undefined?contactNumber:this.state.contactNumber, shippingAddress: shippingAddress!==undefined?shippingAddress:this.state.shippingAddress, deliveryOption: deliveryOption!==undefined?deliveryOption:this.state.deliveryOption, timer: timer===0?60*2:this.state.timer, timerId: timerId===null?null:this.state.timerId, books: newStateBook });
+    this.setState({ step: parseInt(localStorage.step, 10), selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks, error: error, fullName: fullName!==undefined?fullName:this.state.fullName, contactNumber: contactNumber!==undefined?contactNumber:this.state.contactNumber, shippingAddress: shippingAddress!==undefined?shippingAddress:this.state.shippingAddress, deliveryOption: deliveryOption!==undefined?deliveryOption:this.state.deliveryOption, timer: timer===0?60*0.25:this.state.timer, timerId: timerId===null?null:this.state.timerId, books: newStateBook, showTimeoutMessage: showTimeoutMessage!==undefined?showTimeoutMessage:this.state.showTimeoutMessage });
   }
 }
 
