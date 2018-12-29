@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 //import './BookList.css';
 
-const BookList = ({updateFormData, books, selectedBooks, error}) => (
+const BookList = ({ updateFormData, books, selectedBooks, error }) => (
 	<Fragment>
       	<h3>Choose from wide variety of books available in our store</h3>
 		{renderError(error)}
@@ -17,7 +17,7 @@ const BookList = ({updateFormData, books, selectedBooks, error}) => (
 const renderBook = (updateFormData, book, selectedBooks) => (
 	<div className="checkbox" key={book.id}>
 		<label>
-			<input type="checkbox" value={book.name} onChange={(e) => handleSelectBooks(e, updateFormData, selectedBooks)} />
+			<input type="checkbox" value={book.name} checked={book.checked?true:false} onChange={(e) => handleSelectBooks(e, updateFormData, selectedBooks, book)} />
 			{book.name}--{book.author}
 		</label>
 	</div>
@@ -33,10 +33,10 @@ const renderError = (error) => {
     }
 }
 
-const handleSelectBooks = (event, updateFormData, selectedBooks) => {
-	//console.log('handleSelectBooks', event, selectedBooks)
+const handleSelectBooks = (event, updateFormData, selectedBooks, book) => {
 	let index = selectedBooks.indexOf(event.target.value);
 
+	book.checked = event.target.checked
 	if(event.target.checked) {
 		if(index === -1) {
 			selectedBooks.push(event.target.value);
@@ -44,7 +44,7 @@ const handleSelectBooks = (event, updateFormData, selectedBooks) => {
 	} else {
 		selectedBooks.splice(index, 1);
 	}
-	//updateFormData(selectedBooks)
+	updateFormData({book: book})
 }
 
 const handleSubmit = (event, updateFormData, selectedBooks, error) => {

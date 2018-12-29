@@ -9,9 +9,9 @@ import './BookStore.css'
 class BookStore extends PureComponent {
   state = {
     books: [
-      {id: 1, name: 'Zero to One', author: 'Peter Thiel'},
-      {id: 2, name: 'Monk who sold his Ferrari', author: 'Robin Sharma'},
-      {id: 3, name: 'Wings of Fire', author: 'A.P.J. Abdul Kalam'}
+      {id: 1, name: 'Zero to One', author: 'Peter Thiel', checked: false},
+      {id: 2, name: 'Monk who sold his Ferrari', author: 'Robin Sharma', checked: false},
+      {id: 3, name: 'Wings of Fire', author: 'A.P.J. Abdul Kalam', checked: false}
     ],
     selectedBooks: [],
     step: localStorage.step?parseInt(localStorage.step, 10):1,
@@ -62,7 +62,7 @@ class BookStore extends PureComponent {
     let seconds = parseInt(timer%60, 10)
     minutes = minutes.toString().length<2?`0${minutes}`:minutes
     seconds = seconds.toString().length<2?`0${seconds}`:seconds
-    console.log('BookStore render: books', books, 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId);
+    console.log('BookStore render: books', books, 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId );
     return (
       <div className="App">
         {
@@ -94,11 +94,15 @@ class BookStore extends PureComponent {
   }
 
   updateFormData = (formData) => {
-    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId } = formData
-    console.log("updateFormData 1", error===""?(step!==undefined?step:this.state.step) + 1:this.state.step)
+    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, book } = formData
     localStorage.setItem('step', error===""?(step!==undefined?step:this.state.step) + 1:this.state.step)
-    console.log("updateFormData 2", parseInt(localStorage.step, 10))
-    this.setState({ step: parseInt(localStorage.step, 10), selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks, error: error, fullName: fullName!==undefined?fullName:this.state.fullName, contactNumber: contactNumber!==undefined?contactNumber:this.state.contactNumber, shippingAddress: shippingAddress!==undefined?shippingAddress:this.state.shippingAddress, deliveryOption: deliveryOption!==undefined?deliveryOption:this.state.deliveryOption, timer: timer===0?60*0.5:this.state.timer, timerId: timerId===null?null:this.state.timerId });
+    const newStateBook = this.state.books.map((stateBook) => {
+      if(book && stateBook.id === book.id) {
+        stateBook.checked = book.checked
+      }
+      return stateBook
+    })
+    this.setState({ step: parseInt(localStorage.step, 10), selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks, error: error, fullName: fullName!==undefined?fullName:this.state.fullName, contactNumber: contactNumber!==undefined?contactNumber:this.state.contactNumber, shippingAddress: shippingAddress!==undefined?shippingAddress:this.state.shippingAddress, deliveryOption: deliveryOption!==undefined?deliveryOption:this.state.deliveryOption, timer: timer===0?60*0.5:this.state.timer, timerId: timerId===null?null:this.state.timerId, books: newStateBook });
   }
 }
 
