@@ -21,7 +21,7 @@ class BookStore extends PureComponent {
     shippingAddress: "",
     deliveryOption: "Primary",
     timerId: null,
-    timer: 60*0.5
+    timer: 60*2
   }
 
   componentDidMount() {
@@ -38,7 +38,7 @@ class BookStore extends PureComponent {
       this.setState({ step: 1, timerId: null })
       localStorage.setItem('step', 1)
     }
-    if(this.state.timerId===null && this.state.timer===60*0.5) {
+    if(this.state.timerId===null && this.state.timer===60*2) {
       if(this.state.step > 1 && this.state.step < 5) {
         this.setState({timerId: setInterval(() => this.setState({timer: this.state.timer - 1}), 1000)})
       }
@@ -48,7 +48,7 @@ class BookStore extends PureComponent {
 
   componentDidUpdate(a, b, c) {
     if(b.timer===0) {
-      this.setState({timer: 60*0.5})
+      this.setState({timer: 60*2})
     }
   }
 
@@ -102,7 +102,7 @@ class BookStore extends PureComponent {
       }
       return stateBook
     })
-    this.setState({ step: parseInt(localStorage.step, 10), selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks, error: error, fullName: fullName!==undefined?fullName:this.state.fullName, contactNumber: contactNumber!==undefined?contactNumber:this.state.contactNumber, shippingAddress: shippingAddress!==undefined?shippingAddress:this.state.shippingAddress, deliveryOption: deliveryOption!==undefined?deliveryOption:this.state.deliveryOption, timer: timer===0?60*0.5:this.state.timer, timerId: timerId===null?null:this.state.timerId, books: newStateBook });
+    this.setState({ step: parseInt(localStorage.step, 10), selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks, error: error, fullName: fullName!==undefined?fullName:this.state.fullName, contactNumber: contactNumber!==undefined?contactNumber:this.state.contactNumber, shippingAddress: shippingAddress!==undefined?shippingAddress:this.state.shippingAddress, deliveryOption: deliveryOption!==undefined?deliveryOption:this.state.deliveryOption, timer: timer===0?60*2:this.state.timer, timerId: timerId===null?null:this.state.timerId, books: newStateBook });
   }
 }
 
