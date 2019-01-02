@@ -4,6 +4,7 @@ import ShippingDetails from './ShippingDetails'
 import DeliveryDetails from './DeliveryDetails'
 import Confirmation from './Confirmation'
 import Success from './Success'
+import BookSearch from './BookSearch'
 import './BookStore.css'
 
 class BookStore extends PureComponent {
@@ -22,7 +23,12 @@ class BookStore extends PureComponent {
     deliveryOption: "Primary",
     timerId: null,
     timer: 60*2,
-    showTimeoutMessage: false
+    showTimeoutMessage: false,
+    docs: [],
+    numFound: 0,
+    start: 0,
+    searchCompleted: false,
+    searching: false
   }
 
   componentDidMount() {
@@ -33,7 +39,7 @@ class BookStore extends PureComponent {
   }
 
   getSnapshotBeforeUpdate(prevProps, prevState) {
-    console.log('getSnapshotBeforeUpdate', prevProps, prevState, this.state.step)
+    console.log('getSnapshotBeforeUpdate -> prevProps:', prevProps, 'prevState:', prevState, 'State:', this.state)
     if(this.state && prevState && prevState.timer===1 && this.state.timerId!==null) {
       clearInterval(this.state.timerId)
       this.setState({ step: 1, timerId: null })
@@ -58,12 +64,12 @@ class BookStore extends PureComponent {
   }
 
   render() {
-    const { books, selectedBooks, step, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage } = this.state
+    const { books, selectedBooks, step, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage, searching, searchCompleted, start, numFound, docs } = this.state
     let minutes = parseInt(timer/60, 10)
     let seconds = parseInt(timer%60, 10)
     minutes = minutes.toString().length<2?`0${minutes}`:minutes
     seconds = seconds.toString().length<2?`0${seconds}`:seconds
-    console.log('BookStore render: books', books, 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId );
+    console.log('BookStore render: books', books, 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId, 'searching', searching, 'searchCompleted', searchCompleted, 'start', start, 'numFound', numFound, 'docs', docs )
     return (
       <div className="App">
         {
@@ -82,6 +88,9 @@ class BookStore extends PureComponent {
           step === 5 ?
             <Success updateFormData={this.updateFormData} fullName={fullName} shippingAddress={shippingAddress} selectedBooks={selectedBooks} numberOfDays={deliveryOption === "Normal"?"3 to 4":"1 to 2"} />
           :
+          step === 6 ?
+            <BookSearch updateFormData={this.updateFormData} searching={searching} searchCompleted={searchCompleted} start={start} numFound={numFound} docs={docs} />
+          :
             <BookList updateFormData={this.updateFormData} books={books} selectedBooks={selectedBooks} error={error} />
         }
         {
@@ -98,7 +107,7 @@ class BookStore extends PureComponent {
   }
 
   updateFormData = (formData) => {
-    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, book, showTimeoutMessage } = formData
+    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, book, showTimeoutMessage, docs, numFound, start, searchCompleted, searching } = formData    
     localStorage.setItem('step', error===""?(step!==undefined?step:this.state.step) + 1:this.state.step)
     const newStateBook = this.state.books.map((stateBook) => {
       if(book && stateBook.id === book.id) {
@@ -106,7 +115,7 @@ class BookStore extends PureComponent {
       }
       return stateBook
     })
-    this.setState({ step: parseInt(localStorage.step, 10), selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks, error: error, fullName: fullName!==undefined?fullName:this.state.fullName, contactNumber: contactNumber!==undefined?contactNumber:this.state.contactNumber, shippingAddress: shippingAddress!==undefined?shippingAddress:this.state.shippingAddress, deliveryOption: deliveryOption!==undefined?deliveryOption:this.state.deliveryOption, timer: timer===0?60*2:this.state.timer, timerId: timerId===null?null:this.state.timerId, books: newStateBook, showTimeoutMessage: showTimeoutMessage!==undefined?showTimeoutMessage:this.state.showTimeoutMessage });
+    this.setState({ step: parseInt(localStorage.step, 10), selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks, error: error, fullName: fullName!==undefined?fullName:this.state.fullName, contactNumber: contactNumber!==undefined?contactNumber:this.state.contactNumber, shippingAddress: shippingAddress!==undefined?shippingAddress:this.state.shippingAddress, deliveryOption: deliveryOption!==undefined?deliveryOption:this.state.deliveryOption, timer: timer===0?60*2:this.state.timer, timerId: timerId===null?null:this.state.timerId, books: newStateBook, showTimeoutMessage: showTimeoutMessage!==undefined?showTimeoutMessage:this.state.showTimeoutMessage, docs: docs!==undefined&&docs.length>0?docs:this.state.docs, numFound: numFound!==undefined&&numFound!==0?numFound:this.state.numFound, start: start!==undefined&&start!==0?start:this.state.start, searchCompleted: searchCompleted!==undefined?searchCompleted:this.state.searchCompleted, searching: searching!==undefined?searching:this.state.searching });
   }
 }
 
