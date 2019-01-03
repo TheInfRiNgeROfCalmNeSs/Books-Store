@@ -15,8 +15,8 @@ const Success = ({fullName, shippingAddress, selectedBooks, numberOfDays, update
 
 const handleSubmit = (event, updateFormData) => {
 	event.preventDefault()
-	//localStorage.setItem('step', 1)
-	updateFormData({/*step: 0, */error: "", showTimeoutMessage: false})
+	localStorage.setItem('step', 1)
+	updateFormData({step: 0, error: "", showTimeoutMessage: false})
 }
 
 export default Success

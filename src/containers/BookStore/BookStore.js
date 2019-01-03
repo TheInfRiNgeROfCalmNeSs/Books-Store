@@ -74,7 +74,8 @@ class BookStore extends PureComponent {
       <div className="App">
         {
           step === 1 ?
-            <BookList updateFormData={this.updateFormData} books={books} selectedBooks={selectedBooks} error={error} showTimeoutMessage={showTimeoutMessage} />
+            //<BookList updateFormData={this.updateFormData} books={books} selectedBooks={selectedBooks} error={error} showTimeoutMessage={showTimeoutMessage} />
+            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} />
           :
           step === 2 ?
             <ShippingDetails updateFormData={this.updateFormData} error={error} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress}  />
@@ -87,9 +88,9 @@ class BookStore extends PureComponent {
           :
           step === 5 ?
             <Success updateFormData={this.updateFormData} fullName={fullName} shippingAddress={shippingAddress} selectedBooks={selectedBooks} numberOfDays={deliveryOption === "Normal"?"3 to 4":"1 to 2"} />
-          :
+          /*:
           step === 6 ?
-            <BookSearch updateFormData={this.updateFormData} searching={searching} searchCompleted={searchCompleted} start={start} numFound={numFound} docs={docs} />
+            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} />*/
           :
             <BookList updateFormData={this.updateFormData} books={books} selectedBooks={selectedBooks} error={error} />
         }

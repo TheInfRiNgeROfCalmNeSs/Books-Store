@@ -1,0 +1,29 @@
+#bookSearchTable {
+	border-collapse: collapse;
+}
+#bookSearchTable td, #bookSearchTable th {
+	display: none;
+}
+#bookSearchTable td:first-child, #bookSearchTable th:first-child, #bookSearchTable tr.selected td, #bookSearchTable tr.selected th {
+	display: table-cell;
+    border: 1px solid #DFDFDF;
+    padding: 10px;
+}
+
+#bookSearchTable th {
+    background-color: #EDEDED;
+}
+
+.btn-success {
+	margin: 1% 0%;
+}
+
+div.container {
+	width: 95%;
+    margin: 0 auto;
+}
+
+span.text-center {
+	margin: 1% 0% 0%;
+    display: block;
+}
