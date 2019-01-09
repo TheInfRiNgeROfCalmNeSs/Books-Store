@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
-//import './ShippingDetails.css';
+import './DeliveryDetails.scss';
 
 const DeliveryDetails = ({deliveryOption, updateFormData}) => {
     return (
       <Fragment>
         <h1>Choose your delivery options here</h1>
         <div>
-          <form onSubmit={(e) => handleSubmit(e, updateFormData, deliveryOption)}>
+          <form className="delivery-details-form" onSubmit={(e) => handleSubmit(e, updateFormData, deliveryOption)}>
             <div className="radio">
               <label>
                 <input type="radio" checked={deliveryOption === "Primary"} value="Primary" onChange={(e) => handleChange(e, updateFormData, deliveryOption)} />

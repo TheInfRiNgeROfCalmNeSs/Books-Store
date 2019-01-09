@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
-//import './ShippingDetails.css';
+import './Success.scss';
 
 const Success = ({fullName, shippingAddress, selectedBooks, numberOfDays, updateFormData}) => {
     return (
 	   	<Fragment>
-			<form onSubmit={(e) => handleSubmit(e, updateFormData)}>
+			<form className="success-form" onSubmit={(e) => handleSubmit(e, updateFormData)}>
 				<h2>Thank you for shopping with us {fullName}.</h2>
-				<h4>You will soon get {selectedBooks.join(", ")} at {shippingAddress} in approximately {numberOfDays} days.</h4>
+				<h5>You will soon get {selectedBooks.join(", ")} at {shippingAddress} in approximately {numberOfDays} days.</h5>
 				<button className="btn btn-success">Continue Shopping</button>
 			</form>
 		</Fragment>

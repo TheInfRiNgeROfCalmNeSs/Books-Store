@@ -5,11 +5,19 @@ const ShippingDetails = ({ updateFormData, error, fullName, contactNumber, shipp
 	<Fragment>
 		<h3>Enter your shipping information.</h3>
 		{renderError(error)}
-		<form onSubmit={(e) => handleSubmit(e, updateFormData, fullName, contactNumber, shippingAddress, validateInput, error)}>
+		<form className="shipping-details-form" onSubmit={(e) => handleSubmit(e, updateFormData, fullName, contactNumber, shippingAddress, validateInput, error)}>
+		<div className="form-group">
 			<input className="form-control" type="text" placeholder="Full Name" value={fullName} onChange={(event) => handleChange(event, updateFormData, "fullName")} />
+		</div>
+		<div className="form-group">
 			<input className="form-control" type="text" placeholder="Contact number" value={contactNumber} onChange={(event) => handleChange(event, updateFormData, "contactNumber")} />
+		</div>
+		<div className="form-group">
 			<input className="form-control" type="text" placeholder="Shipping Address" value={shippingAddress} onChange={(event) => handleChange(event, updateFormData, "shippingAddress")} />
+		</div>
+		<div className="form-group">
 			<button type="submit" className="btn btn-success">Submit</button>
+		</div>
 		</form>
 	</Fragment>
 )

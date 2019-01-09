@@ -75,7 +75,7 @@ class BookStore extends PureComponent {
         {
           step === 1 ?
             //<BookList updateFormData={this.updateFormData} books={books} selectedBooks={selectedBooks} error={error} showTimeoutMessage={showTimeoutMessage} />
-            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} />
+            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} />
           :
           step === 2 ?
             <ShippingDetails updateFormData={this.updateFormData} error={error} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress}  />
@@ -109,6 +109,7 @@ class BookStore extends PureComponent {
 
   updateFormData = (formData) => {
     const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, book, showTimeoutMessage, docs, numFound, start, searchCompleted, searching } = formData    
+    console.log('updateFormData', 'error', error, 'step', step)
     localStorage.setItem('step', error===""?(step!==undefined?step:this.state.step) + 1:this.state.step)
     const newStateBook = this.state.books.map((stateBook) => {
       if(book && stateBook.id === book.id) {
