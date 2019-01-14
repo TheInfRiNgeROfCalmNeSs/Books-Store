@@ -15,7 +15,7 @@ const BookSearch = ({ updateFormData, selectedBooks, docs, error, numFound, star
 					<div className="input-group">
 						<input type="text" className="form-control" id="search-for-books" placeholder="Search For Books..." />
 						<span className="input-group-btn">
-							<button className="btn btn-default" type="button" onClick={() => performSearch(updateFormData, page)}>Go!</button>
+							<button className="btn btn-default" type="button" onClick={() => performSearch(updateFormData, page, error)}>Go!</button>
 						</span>
 					</div>
 				</div>
@@ -189,12 +189,17 @@ const handleSelectDocs = (event, selectedBooks, updateFormData) => {
 	//console.log("handleSelectDocs 2 -> checked:", event.target.checked, "selectedBooks:", selectedBooks, "index:", index)
 }
 
-const performSearch = (updateFormData, page) => {
+const performSearch = (updateFormData, page, error) => {
 	let searchTerm = document.querySelector("#search-for-books").value
 	//console.log('performSearch -> searchInput:', document.querySelector("#search-for-books").value, 'page', page)
-	openLibrarySearch(searchTerm, updateFormData, page)
-	//this.setState({searchCompleted: false, searching: true})
-	updateFormData({searchCompleted: false, searching: true})
+	if(searchTerm.length === 0) {
+		error = "Please provide a book name in the field";
+		updateFormData({error: error})
+	} else {
+		error = ""
+		openLibrarySearch(searchTerm, updateFormData, page)
+		updateFormData({searchCompleted: false, searching: true})
+	}
 }
 
 const updateState = (json, updateFormData) => {

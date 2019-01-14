@@ -1,8 +1,10 @@
 .confirmation-form {
 	margin-top: 30px;
 	.btn-success {
-		/*margin-top: 10px;*/
 		margin-bottom: 15px;
+		&.go-back {
+			margin-left: 1%;
+		}
 	}
 	.margin-left {
 		margin-left: 6px;

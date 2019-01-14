@@ -32,9 +32,17 @@ const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress,
 	          </div>
 	          <br/>
 	          <button className="btn btn-success">Place order</button>
+	          <button className="btn btn-success go-back" onClick={(e) => goBack(e, updateFormData)}>Go Back</button>
 	        </form>
 		</Fragment>
     )
+}
+
+const goBack = (e, updateFormData) => {
+	if(e.target.classList.value.includes("go-back")) {
+		console.log('goBack')
+		updateFormData({error: "", step: 2})
+	}
 }
 
 const handleSubmit = (event, updateFormData, fullName, contactNumber, shippingAddress, selectedBooks, timerId) => {
