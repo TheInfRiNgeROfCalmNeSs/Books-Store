@@ -1,9 +1,11 @@
 import React from "react"
-import { Alert } from "reactstrap"
+import { Alert, Pagination, PaginationItem, PaginationLink } from "reactstrap"
+import { ClipLoader } from "react-spinners";
+import CountUp from 'react-countup';
 import "./BookSearch.scss"
 
 
-const BookSearch = ({ updateFormData, selectedBooks, docs, error, numFound, start, searchCompleted, searching, showTimeoutMessage, fullName }) => (
+const BookSearch = ({ updateFormData, selectedBooks, docs, error, numFound, start, searchCompleted, searching, showTimeoutMessage, fullName, loading, page }) => (
 	<div className="container">
 		<h3>Search and choose from wide variety of books available in our store</h3>
 		{renderError(error)}
@@ -13,7 +15,7 @@ const BookSearch = ({ updateFormData, selectedBooks, docs, error, numFound, star
 					<div className="input-group">
 						<input type="text" className="form-control" id="search-for-books" placeholder="Search For Books..." />
 						<span className="input-group-btn">
-							<button className="btn btn-default" type="button" onClick={() => performSearch(updateFormData)}>Go!</button>
+							<button className="btn btn-default" type="button" onClick={() => performSearch(updateFormData, page)}>Go!</button>
 						</span>
 					</div>
 				</div>
@@ -21,20 +23,21 @@ const BookSearch = ({ updateFormData, selectedBooks, docs, error, numFound, star
 		   {
 				(() => {
 						if(searching) {
-							return renderSearching()
+							return renderSearching(loading)
 						} else {
-							return searchCompleted ? renderSearchElements(numFound, docs, selectedBooks, fullName, updateFormData) : null
+							return searchCompleted ? renderSearchElements(numFound, docs, selectedBooks, fullName, updateFormData, start) : null
 						}
 					}
 				)()
 			}
 			{
 				searchCompleted?
-					<button type="submit" className="btn btn-success">Buy Seleted Books</button>
+					<button type="submit" className="btn btn-success">Buy Selected Books</button>
 				:
 					null
 			}
 		</form>
+		{searchCompleted?renderPagination(updateFormData, page, numFound):null}
 	</div>
 )
 
@@ -48,21 +51,26 @@ const renderError = (error) => {
     }
 }
 
-const renderSearching = () => (
+const renderSearching = (loading) => (
 	<div className="row">
 		<div className="col-lg-12">
 			<div className="text-center div-spinner">
-				<i className="fa fa-spinner fapulse fa-5x"></i>
-				loading...
+				{/*<i className="fa fa-spinner fapulse fa-5x"></i>*/}
+		        <ClipLoader
+		          sizeUnit={"px"}
+		          size={120}
+		          color={'#123abc'}
+		          loading={loading}
+		        />
 			</div>
 		</div>
 	</div>
 )
 
-const renderSearchElements = (numFound, docs, selectedBooks, fullName, updateFormData) => (
+const renderSearchElements = (numFound, docs, selectedBooks, fullName, updateFormData, start) => (
 	<div className="row">
 		<div className="col-lg-12">
-			<span className="text-center">Total Results: {numFound}</span>
+			<span className="text-center">Total Results: <CountUp end={numFound} /></span>
 			<table className="table table-stripped" id="bookSearchTable">
 				<thead>
 					<tr className={selectedBooks.length>0?"selected":null}>
@@ -74,37 +82,89 @@ const renderSearchElements = (numFound, docs, selectedBooks, fullName, updateFor
 					</tr>
 				</thead>
 				<tbody>
-					{renderDocs(docs, selectedBooks, fullName, updateFormData)}
+					{renderDocs(docs, selectedBooks, fullName, updateFormData, start)}
 				</tbody>
 			</table>
 		</div>
 	</div>
 )
 
-const renderDocs = (docs, selectedBooks, fullName, updateFormData) => {
-	return docs.map((doc, ind) => {
-		//console.log('renderDocs docs.map', doc.title, selectedBooks, selectedBooks.includes(doc.title))
-		return (
-			// eslint-disable-next-line
-			<tr key={ind} className={selectedBooks.length>0&&fullName!==""&&selectedBooks.includes(doc.title)||fullName===""&&selectedBooks.includes(doc.title)?"selected":null}>
-				<td>
-					<div className="div-after-label">
-						<div className="inner">
-							Click It To Select
-						</div>
+const renderDocs = (docs, selectedBooks, fullName, updateFormData, start) => (
+	docs.map((doc, ind) => (
+		// eslint-disable-next-line
+		<tr key={ind} className={selectedBooks.length>0&&fullName!==""&&selectedBooks.includes(doc.title)||fullName===""&&selectedBooks.includes(doc.title)?"selected":null}>
+			<td>
+				<div className="div-after-label">
+					<div className="inner">
+						Click It To Select
 					</div>
-					<label>
-						<input type="checkbox" value={doc.title} checked={selectedBooks.length>0&&fullName!==""&&selectedBooks.includes(doc.title)?selectedBooks.includes(doc.title):null} onChange={(e) => handleSelectDocs(e, selectedBooks, updateFormData)} />
-						<strong>{doc.title.length>50?`${doc.title.substr(0, 50)}...`:doc.title}</strong> {doc.author_name?` — (${doc.author_name && doc.author_name.length>1?doc.author_name.shift():doc.author_name})`:null}
-					</label>
-				</td>
-				<td>{doc.first_publish_year}</td>
-				<td>{doc.language && doc.language.length>1?doc.language.join(", "):doc.language}</td>
-				<td>{doc.subject && doc.subject.length>1?doc.subject.slice(0, 3).join(", ").replace(/--/g, "—"):doc.subject && doc.subject[0].replace(/--/g, "—")}</td>
-				<td>{doc.publisher && doc.publisher.length>1?`${doc.publisher.slice(0, 3).join(", ")} and ${doc.publisher.length-3} other`:doc.publisher}</td>
-			</tr>
-		)
-	})
+				</div>
+				<label>
+					<div className="book-number" debugstart={start}>{start+1+ind}</div>
+					<input type="checkbox" value={doc.title} checked={selectedBooks.length>0&&fullName!==""&&selectedBooks.includes(doc.title)?selectedBooks.includes(doc.title):null} onChange={(e) => handleSelectDocs(e, selectedBooks, updateFormData)} />
+					<strong>{doc.title.length>50?`${doc.title.substr(0, 50)}...`:doc.title}</strong> {doc.author_name?` — (${doc.author_name && doc.author_name.length>1?doc.author_name.shift():doc.author_name})`:null}
+				</label>
+			</td>
+			<td>{doc.first_publish_year}</td>
+			<td>{doc.language && doc.language.length>1?doc.language.join(", "):doc.language}</td>
+			<td>{doc.subject && doc.subject.length>1?doc.subject.slice(0, 3).join(", ").replace(/--/g, "—"):doc.subject && doc.subject[0].replace(/--/g, "—")}</td>
+			<td>{doc.publisher && doc.publisher.length>1?`${doc.publisher.slice(0, 3).join(", ")} and ${doc.publisher.length-3} other`:doc.publisher}</td>
+		</tr>
+	))
+)
+
+const renderPagination = (updateFormData, page, numFound) => {
+	const lastPage = Math.ceil(numFound/100)
+	const pagesArray = [1, 2, 3, 4, 5, 6, 7]	// lastPage-2, lastPage-1, lastPage
+	const pagesArrayTwo = []
+	if (page < 3 || lastPage-page<6) {
+		pagesArray.splice(3, 4, '...', lastPage-2, lastPage-1, lastPage)
+		//console.log('renderPagination -> pagesArray:', pagesArray)	// 1, 2
+	} else if(page > 2 && page < 7) {
+		pagesArray.splice(page+1, 3, '...', lastPage-2, lastPage-1, lastPage)
+		//console.log('renderPagination -> pagesArray:', pagesArray)	// 3, 4, 5, 6
+	} else if(page > 6 && lastPage-page>5) {
+		pagesArray.splice(3, 4, '...', page-1, page, page+1, '...', lastPage-2, lastPage-1, lastPage)
+		//console.log('renderPagination -> pagesArray:', pagesArray)	// 7, 8, 9 ... 28, 29, 30
+	}
+	if(page > 6 && lastPage-page<6) {
+		const firstPage = page-1
+		let counter = 0
+		if(lastPage!==page) {
+			while(pagesArrayTwo.length<lastPage-firstPage+1) {
+				pagesArrayTwo.push(firstPage+counter++)
+			}
+		}
+		//console.log('renderPagination -> pagesArrayTwo:', pagesArrayTwo)	// 31, 32, 33, 34, 35, 36
+	}
+	if(pagesArrayTwo.length>0) {
+		pagesArray.splice(4, 0+pagesArrayTwo.length, ...pagesArrayTwo)
+	}//pagesArray
+	console.log('renderPagination -> pagesArray:', pagesArray)
+	return (
+		<Pagination className="Books-Pagination" size="lg" aria-label="Books Page Navigation">
+			<PaginationItem disabled={page===1?true:false}>
+				<PaginationLink previous />
+			</PaginationItem>
+			{
+				pagesArray.map((val, ind) => (
+					<PaginationItem key={ind} active={val===page?true:false} disabled={val==="..."?true:false}>
+						<PaginationLink onClick={(e) => goToPage(e, updateFormData, val)}>
+							{val}
+						</PaginationLink>
+					</PaginationItem>
+				))
+			}
+			<PaginationItem disabled={page===lastPage?true:false}>
+				<PaginationLink next />
+			</PaginationItem>
+		</Pagination>
+	)
+}
+
+const goToPage = (e, updateFormData, page) => {
+	console.log('goToPage', updateFormData, 'e', e.target)
+	updateFormData({page: page})
 }
 
 const handleSelectDocs = (event, selectedBooks, updateFormData) => {
@@ -129,10 +189,10 @@ const handleSelectDocs = (event, selectedBooks, updateFormData) => {
 	//console.log("handleSelectDocs 2 -> checked:", event.target.checked, "selectedBooks:", selectedBooks, "index:", index)
 }
 
-const performSearch = (updateFormData) => {
+const performSearch = (updateFormData, page) => {
 	let searchTerm = document.querySelector("#search-for-books").value
-	//console.log('performSearch -> searchInput:', document.querySelector("#search-for-books").value)
-	openLibrarySearch(searchTerm, updateFormData)
+	//console.log('performSearch -> searchInput:', document.querySelector("#search-for-books").value, 'page', page)
+	openLibrarySearch(searchTerm, updateFormData, page)
 	//this.setState({searchCompleted: false, searching: true})
 	updateFormData({searchCompleted: false, searching: true})
 }
@@ -143,8 +203,8 @@ const updateState = (json, updateFormData) => {
 	updateFormData({ ...json, searchCompleted: true, searching: false })
 }
 
-const openLibrarySearch = (searchTerm, updateFormData) => {
-	let openLibraryURI = `http://openlibrary.org/search.json?page=1&q=${searchTerm}`
+const openLibrarySearch = (searchTerm, updateFormData, page) => {
+	let openLibraryURI = `http://openlibrary.org/search.json?page=${page}&q=${searchTerm}`
 	fetch(openLibraryURI)
 	.then(/*parseJSON*/(response) => response.json())
 	.then((a) => updateState(a, updateFormData))
