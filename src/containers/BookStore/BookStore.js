@@ -29,7 +29,8 @@ class BookStore extends PureComponent {
     start: 0,
     searchCompleted: false,
     searching: false,
-    page: 1
+    page: 1,
+    thumbs: {}
   }
 
   componentDidMount() {
@@ -71,18 +72,18 @@ class BookStore extends PureComponent {
   }
 
   render() {
-    const { books, selectedBooks, step, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage, searching, searchCompleted, start, numFound, docs, loading, page } = this.state
+    const { books, selectedBooks, step, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage, searching, searchCompleted, start, numFound, docs, loading, page, thumbs } = this.state
     let minutes = parseInt(timer/60, 10)
     let seconds = parseInt(timer%60, 10)
     minutes = minutes.toString().length<2?`0${minutes}`:minutes
     seconds = seconds.toString().length<2?`0${seconds}`:seconds
-    console.log('BookStore render: books', books, 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId, 'searching', searching, 'searchCompleted', searchCompleted, 'start', start, 'numFound', numFound, 'docs', docs, 'page', page )
+    console.log('BookStore render: books', books, 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId, 'searching', searching, 'searchCompleted', searchCompleted, 'start', start, 'numFound', numFound, 'docs', docs, 'page', page, 'thumbs', thumbs )
     return (
       <div className="App">
         {
           step === 1 ?
             //<BookList updateFormData={this.updateFormData} books={books} selectedBooks={selectedBooks} error={error} showTimeoutMessage={showTimeoutMessage} />
-            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} />
+            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} thumbs={thumbs} />
           :
           step === 2 ?
             <ShippingDetails updateFormData={this.updateFormData} error={error} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress}  />
@@ -115,8 +116,7 @@ class BookStore extends PureComponent {
   }
 
   updateFormData = (formData) => {
-    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, book, showTimeoutMessage, docs, numFound, start, searchCompleted, searching, page } = formData
-    console.log('updateFormData', 'error', error, 'step', step, 'page', page)
+    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, book, showTimeoutMessage, docs, numFound, start, searchCompleted, searching, page, thumbs } = formData
     localStorage.setItem('step', error===""?(step!==undefined?step:this.state.step) + 1:this.state.step)
     const newStateBook = this.state.books.map((stateBook) => {
       if(book && stateBook.id === book.id) {
@@ -124,7 +124,26 @@ class BookStore extends PureComponent {
       }
       return stateBook
     })
-    this.setState({ step: parseInt(localStorage.step, 10), selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks, error: error, fullName: fullName!==undefined?fullName:this.state.fullName, contactNumber: contactNumber!==undefined?contactNumber:this.state.contactNumber, shippingAddress: shippingAddress!==undefined?shippingAddress:this.state.shippingAddress, deliveryOption: deliveryOption!==undefined?deliveryOption:this.state.deliveryOption, timer: timer===0?60*2:this.state.timer, timerId: timerId===null?null:this.state.timerId, books: newStateBook, showTimeoutMessage: showTimeoutMessage!==undefined?showTimeoutMessage:this.state.showTimeoutMessage, docs: docs!==undefined&&docs.length>0?docs:this.state.docs, numFound: numFound!==undefined&&numFound!==0?numFound:this.state.numFound, start: start!==undefined?start:this.state.start, searchCompleted: searchCompleted!==undefined?searchCompleted:this.state.searchCompleted, searching: searching!==undefined?searching:this.state.searching, page: page!==undefined?page:this.state.page });
+    this.setState({
+      step: parseInt(localStorage.step, 10),
+      selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks,
+      error: error,
+      fullName: fullName!==undefined?fullName:this.state.fullName,
+      contactNumber: contactNumber!==undefined?contactNumber:this.state.contactNumber,
+      shippingAddress: shippingAddress!==undefined?shippingAddress:this.state.shippingAddress,
+      deliveryOption: deliveryOption!==undefined?deliveryOption:this.state.deliveryOption,
+      timer: timer===0?60*2:this.state.timer,
+      timerId: timerId===null?null:this.state.timerId,
+      books: newStateBook,
+      showTimeoutMessage: showTimeoutMessage!==undefined?showTimeoutMessage:this.state.showTimeoutMessage,
+      docs: docs!==undefined&&docs.length>0?docs:this.state.docs,
+      numFound: numFound!==undefined&&numFound!==0?numFound:this.state.numFound,
+      start: start!==undefined?start:this.state.start,
+      searchCompleted: searchCompleted!==undefined?searchCompleted:this.state.searchCompleted,
+      searching: searching!==undefined?searching:this.state.searching,
+      page: page!==undefined?page:this.state.page,
+      thumbs: thumbs!==undefined?Object.assign(this.state.thumbs, thumbs[0]):this.state.thumbs
+    });
   }
 }
 

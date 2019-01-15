@@ -39,7 +39,8 @@
 						margin: 0px;
 						padding: 3rem 2rem;
 					    width: 100%;
-					    .book-number {
+					    .book-number,
+					    .book-cover {
 							display: inline-block;
 							margin-right: 3%;
 					    }
@@ -131,6 +132,12 @@
 			right: 16px;
 			bottom: 1px;
 	    	position: fixed;
+		}
+
+		.Books-Pagination {
+			display: inline-flex;
+		    position: fixed;
+		    bottom: -6px;
 		}
 	}
 }
