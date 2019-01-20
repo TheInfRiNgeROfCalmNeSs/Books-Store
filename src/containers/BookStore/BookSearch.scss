@@ -21,6 +21,7 @@
 			border-collapse: collapse;
 			tr {
 				background-color: #fbfbfb;
+				height: 181px;
 				td, th {
 					display: table-cell;
 					visibility: hidden;
@@ -31,25 +32,45 @@
 						vertical-align: middle;
 						opacity: 1;
 					    border: 1px solid #DFDFDF;
-					    padding: 0px;
 					    width: 40%;
 					}
 					label {
+						border: 1px dashed mediumvioletred;
 						cursor: pointer;
-						margin: 0px;
+						margin: 12px;
 						padding: 3rem 2rem;
-					    width: 100%;
+					    width: 95%;
+						height: 156px;
+					    line-height: 3.4;
 					    .book-number,
 					    .book-cover {
 							display: inline-block;
 							margin-right: 3%;
+							div {
+								display: none;
+							}
+					    }
+					    .book-cover {
+							height: 48px;
+							vertical-align: -webkit-baseline-middle;
+							&.thumbLoaded {
+								height: 59px;
+							}
+							&.removeLoader {
+								div {
+									display: none;
+								}
+							}
+					    }
+					    .book-author {
+							display: inline-block;
 					    }
 					    input[type="checkbox"] {
 							display: none;
 					    }
 					}
 					.div-after-label {
-						display: inline-block;
+						display: none;
 						visibility: hidden;
 						opacity: 0;
 						transition: visibility 0s, opacity 0.3s linear;
@@ -57,18 +78,19 @@
 				}
 				td {
 					height: 169px;
+					padding: 0px;
 				}
 				th {
 					background-color: #EDEDED;
 					text-align: center;
 					line-height: 3.1;
-					padding: 0px;
+					height: 100%;
 				}
 				&:hover {
 					background-color: #f6f6f6;
 					.div-after-label {
 					    position: relative;
-						/*display: inline-block;*/
+						display: inline-block;
 					    top: 30px;
 					    left: -34%;
 						width: 26%;
@@ -86,7 +108,8 @@
 					    }
 					}
 					label {
-						top: 0px;
+						top: -12px;
+						margin: 0px 12px;
 					    position: relative;
 					}
 				}
@@ -98,11 +121,11 @@
 					visibility: visible;
 					opacity: 1;
 				    border: 1px solid #DFDFDF;
-				    padding: 0px;
 				    vertical-align: middle;
-				    text-align: center;
+
 				}
 				td {
+					text-align: center;
 					&:first-child {
 						text-align: left;
 					}
@@ -110,7 +133,7 @@
 				&:hover {
 					background-color: #ebebeb;
 					.div-after-label {
-						/*display: none;*/
+						display: none;
 						visibility: hidden;
 						opacity: 0;
 					}

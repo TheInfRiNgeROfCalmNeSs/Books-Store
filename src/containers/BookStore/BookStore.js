@@ -30,7 +30,9 @@ class BookStore extends PureComponent {
     searchCompleted: false,
     searching: false,
     page: 1,
-    thumbs: {}
+    thumbs: {},
+    loading: true,
+    removeLoader: {}
   }
 
   componentDidMount() {
@@ -72,18 +74,18 @@ class BookStore extends PureComponent {
   }
 
   render() {
-    const { books, selectedBooks, step, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage, searching, searchCompleted, start, numFound, docs, loading, page, thumbs } = this.state
+    const { books, selectedBooks, step, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage, searching, searchCompleted, start, numFound, docs, loading, page, thumbs, removeLoader } = this.state
     let minutes = parseInt(timer/60, 10)
     let seconds = parseInt(timer%60, 10)
     minutes = minutes.toString().length<2?`0${minutes}`:minutes
     seconds = seconds.toString().length<2?`0${seconds}`:seconds
-    console.log('BookStore render: books', books, 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId, 'searching', searching, 'searchCompleted', searchCompleted, 'start', start, 'numFound', numFound, 'docs', docs, 'page', page, 'thumbs', thumbs )
+    console.log('BookStore render: books', books, 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId, 'searching', searching, 'searchCompleted', searchCompleted, 'start', start, 'numFound', numFound, 'docs', docs, 'page', page, 'thumbs', thumbs, 'removeLoader', removeLoader )
     return (
       <div className="App">
         {
           step === 1 ?
             //<BookList updateFormData={this.updateFormData} books={books} selectedBooks={selectedBooks} error={error} showTimeoutMessage={showTimeoutMessage} />
-            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} thumbs={thumbs} />
+            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} thumbs={thumbs} removeLoader={removeLoader} />
           :
           step === 2 ?
             <ShippingDetails updateFormData={this.updateFormData} error={error} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress}  />
@@ -116,7 +118,7 @@ class BookStore extends PureComponent {
   }
 
   updateFormData = (formData) => {
-    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, book, showTimeoutMessage, docs, numFound, start, searchCompleted, searching, page, thumbs } = formData
+    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, book, showTimeoutMessage, docs, numFound, start, searchCompleted, searching, page, thumbs, removeLoader } = formData
     localStorage.setItem('step', error===""?(step!==undefined?step:this.state.step) + 1:this.state.step)
     const newStateBook = this.state.books.map((stateBook) => {
       if(book && stateBook.id === book.id) {
@@ -142,7 +144,8 @@ class BookStore extends PureComponent {
       searchCompleted: searchCompleted!==undefined?searchCompleted:this.state.searchCompleted,
       searching: searching!==undefined?searching:this.state.searching,
       page: page!==undefined?page:this.state.page,
-      thumbs: thumbs!==undefined?Object.assign(this.state.thumbs, thumbs[0]):this.state.thumbs
+      thumbs: thumbs!==undefined?Object.assign(this.state.thumbs, thumbs[0]):this.state.thumbs,
+      removeLoader: removeLoader!==undefined?removeLoader:this.state.removeLoader
     });
   }
 }
