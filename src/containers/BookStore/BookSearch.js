@@ -5,7 +5,7 @@ import CountUp from 'react-countup';
 import "./BookSearch.scss"
 
 
-const BookSearch = ({ updateFormData, selectedBooks, docs, error, numFound, start, searchCompleted, searching, showTimeoutMessage, fullName, loading, page, thumbs, removeLoader }) => (
+const BookSearch = ({ updateFormData, selectedBooks, docs, error, numFound, start, searchCompleted, searching, showTimeoutMessage, fullName, loading, page, thumbs }) => (
 	<div className="container">
 		<h3>Search and choose from wide variety of books available in our store</h3>
 		{renderError(error)}
@@ -25,7 +25,7 @@ const BookSearch = ({ updateFormData, selectedBooks, docs, error, numFound, star
 						if(searching) {
 							return renderSearching(loading)
 						} else {
-							return searchCompleted ? renderSearchElements(numFound, docs, selectedBooks, fullName, updateFormData, start, thumbs, removeLoader) : null
+							return searchCompleted ? renderSearchElements(numFound, docs, selectedBooks, fullName, updateFormData, start, thumbs) : null
 						}
 					}
 				)()
@@ -73,7 +73,7 @@ const renderSearching = (loading) => (
 	</div>
 )
 
-const renderSearchElements = (numFound, docs, selectedBooks, fullName, updateFormData, start, thumbs, removeLoader) => (
+const renderSearchElements = (numFound, docs, selectedBooks, fullName, updateFormData, start, thumbs) => (
 	<div className="row">
 		<div className="col-lg-12">
 			<span className="text-center">Total Results: <CountUp end={numFound} /></span>
@@ -88,14 +88,14 @@ const renderSearchElements = (numFound, docs, selectedBooks, fullName, updateFor
 					</tr>
 				</thead>
 				<tbody>
-					{renderDocs(docs, selectedBooks, fullName, updateFormData, start, thumbs, removeLoader)}
+					{renderDocs(docs, selectedBooks, fullName, updateFormData, start, thumbs)}
 				</tbody>
 			</table>
 		</div>
 	</div>
 )
 
-const renderDocs = (docs, selectedBooks, fullName, updateFormData, start, thumbs, removeLoader) => (
+const renderDocs = (docs, selectedBooks, fullName, updateFormData, start, thumbs) => (
 	docs.map((doc, ind) => (
 		// eslint-disable-next-line
 		<tr key={ind} className={selectedBooks.length>0&&fullName!==""&&selectedBooks.includes(`${doc.title} (#${start+1+ind})`)||fullName===""&&selectedBooks.includes(`${doc.title} (#${start+1+ind})`)?"selected":null}>
@@ -108,12 +108,13 @@ const renderDocs = (docs, selectedBooks, fullName, updateFormData, start, thumbs
 				<label>
 					<div className="book-number">{start+1+ind}</div>
 					<input type="checkbox" value={`${doc.title} (#${start+1+ind})`} id={`checkbox${ind}`}
-							checked={selectedBooks.length>0&&fullName!==""&&selectedBooks.includes(`${doc.title} (#${start+1+ind})`)?selectedBooks.includes(`${doc.title} (#${start+1+ind})`):null}
+							// eslint-disable-next-line
+							checked={selectedBooks.length>0&&fullName!==""&&selectedBooks.includes(`${doc.title} (#${start+1+ind})`)||fullName===""&&selectedBooks.includes(`${doc.title} (#${start+1+ind})`)?selectedBooks.includes(`${doc.title} (#${start+1+ind})`):null}
 							onChange={(e) => handleSelectDocs(e, selectedBooks, updateFormData, doc.isbn?doc.isbn[0]:null)} />
-					<div className={`book-cover${thumbs.hasOwnProperty(ind)?" thumbLoaded":removeLoader?" removeLoader":""}`}>
+					<div className={`book-cover${thumbs.hasOwnProperty(ind)?" thumbLoaded":""}`}>
 						{
 							thumbs.hasOwnProperty(ind) ?
-								<img src={thumbs[ind]} alt={doc.title} />
+								<img src={thumbs[ind]} className="book-cover-img" alt={doc.title} />
 							:
 						        <ClipLoader
 						          sizeUnit={"px"}
@@ -123,19 +124,20 @@ const renderDocs = (docs, selectedBooks, fullName, updateFormData, start, thumbs
 						        />
 						}
 					</div>
-					<strong>{doc.title.length>50?`${doc.title.substr(0, 50)}...`:doc.title}</strong> <div className="book-author">{doc.author_name?` — (${doc.author_name && doc.author_name.length>1?doc.author_name.shift():doc.author_name})`:null}</div>
+					<strong>{doc.title.length>48?`${doc.title.substr(0, 48)}...`:doc.title}</strong> <div className="book-author">{doc.author_name?` — (${doc.author_name && doc.author_name.length>1?doc.author_name.shift():doc.author_name})`:null}</div>
 				</label>
 			</td>
 			<td>{doc.first_publish_year}</td>
 			<td>{doc.language && doc.language.length>1?doc.language.length<4?doc.language.join(", "):`${doc.language.splice(0, 3).join(", ")} and ${doc.language.length} other`:doc.language}</td>
 			<td>{doc.subject && doc.subject.length>1?doc.subject.slice(0, 3).join(", ").replace(/--/g, "—"):doc.subject && doc.subject[0].replace(/--/g, "—")}</td>
-			<td>{doc.publisher && doc.publisher.length>1?doc.publisher.length<4?doc.publisher.join(", "):`${doc.publisher.slice(0, 3).join(", ")} and ${doc.publisher.length-3} other`:doc.publisher}</td>
+			<td>{doc.publisher && doc.publisher.length>1?doc.publisher.length<4?doc.publisher.join(", "):`${doc.publisher.slice(0, 3).join(", ")} and ${doc.publisher.length-3} other`:doc.publisher}{doc.publisher && doc.publisher.length>3?<div className="other-publishers"><div className="title">Publishers</div>{doc.publisher&&doc.publisher.join(", ")}</div>:null}</td>
 		</tr>
 	))
 )
 
 const handleSelectDocs = (event, selectedBooks, updateFormData, isbn) => {
 	let index = selectedBooks.indexOf(event.target.value)
+	//const arr = {}
 	console.log("handleSelectDocs -> checked:", event.target.checked, "id:", event.target.id, 'clear id:', event.target.id.split("checkbox")[1], 'index', index)
 	if(event.target.checked) {
 		if(index === -1) {
@@ -143,22 +145,31 @@ const handleSelectDocs = (event, selectedBooks, updateFormData, isbn) => {
 			selectedBooks.push(event.target.value);
 		}
 	} else {
-		//event.target.parentNode.parentNode.parentNode.className = ""
 		if(index!==-1) {
+			/*arr[event.target.id.split("checkbox")[1]] = null
+			updateFormData({thumbs: [arr]})*/
 			selectedBooks.splice(index, 1);
 		}
 	}
 	if(isbn) {
 		loadThumbs(isbn, updateFormData, event.target.id.split("checkbox")[1], selectedBooks)
 	} else {
-		updateFormData({selectedBooks: selectedBooks, error: undefined, removeLoader: event.target})
+		updateFormData({selectedBooks: selectedBooks, error: undefined, noThumb: {"yes": event.target.id.split("checkbox")[1]}})
 	}
 	//console.log("handleSelectDocs 2 -> checked:", event.target.checked, "selectedBooks:", selectedBooks, "index:", index)
+}
+
+const handleErrors = (response) => {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
 }
 
 const loadThumbs = (isbn, updateFormData, id, selectedBooks) => {
 	const arr = {}
 	fetch(`http://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=viewapi&format=json`)
+	.then(handleErrors)
 	.then((response) => response.json())
 	.then((responseInJSON) => {
 		const thumbnail_url = responseInJSON[`ISBN:${isbn}`].thumbnail_url
@@ -166,7 +177,7 @@ const loadThumbs = (isbn, updateFormData, id, selectedBooks) => {
 		if(arr[id]) {	// does response contain thumbnail_url or not?
 			updateFormData({thumbs: [arr], selectedBooks: selectedBooks, error: undefined})
 		} else {
-			updateFormData({selectedBooks: selectedBooks, error: undefined, removeLoader: id})
+			updateFormData({selectedBooks: selectedBooks, error: undefined, noThumb: {"yes": id}})
 		}
 	})
 	.catch(function(ex) {
@@ -246,6 +257,7 @@ const updateState = (json, updateFormData) => {
 const openLibrarySearch = (searchTerm, updateFormData, page) => {
 	let openLibraryURI = `http://openlibrary.org/search.json?page=${page}&q=${searchTerm}`
 	fetch(openLibraryURI)
+	.then(handleErrors)
 	.then(/*parseJSON*/(response) => response.json())
 	.then((a) => updateState(a, updateFormData))
 	.catch(function(ex) {

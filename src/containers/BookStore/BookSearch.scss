@@ -56,11 +56,6 @@
 							&.thumbLoaded {
 								height: 59px;
 							}
-							&.removeLoader {
-								div {
-									display: none;
-								}
-							}
 					    }
 					    .book-author {
 							display: inline-block;
@@ -79,6 +74,13 @@
 				td {
 					height: 169px;
 					padding: 0px;
+					div.other-publishers {
+						display: none;
+						.title {
+							margin-bottom: 3%;
+							font-weight: 600;
+						}
+					}
 				}
 				th {
 					background-color: #EDEDED;
@@ -128,6 +130,22 @@
 					text-align: center;
 					&:first-child {
 						text-align: left;
+					}
+					&:last-child {
+						&:hover {
+							div.other-publishers {
+								display: inline-block;
+								position: absolute;
+								background: #fff;
+								color: black;
+								padding: 2%;
+								border: 1px solid #fff;
+								box-shadow: 0px 0px 11px 0px rgba(0, 0, 0, 0.5);
+								border-radius: 3px;
+								width: 50%;
+								right: -6%;
+							}
+						}
 					}
 				}
 				&:hover {

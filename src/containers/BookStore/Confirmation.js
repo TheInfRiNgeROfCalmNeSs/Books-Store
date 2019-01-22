@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import './Confirmation.scss';
 
-const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress, selectedBooks, timerId, numberOfDays}) => {
+const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress, selectedBooks, timerId, numberOfDays, thumbs}) => {
     return (
 	   	<Fragment>
 	   		<h1>Are you sure you want to submit the data?</h1>
@@ -23,7 +23,7 @@ const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress,
 	          <br/>
 	          <div>
 	            <strong>Selected books</strong>:
-	            <div className="margin-left">{selectedBooks.join(", ")}</div>
+	            <div className="margin-left">{/*selectedBooks.join(", ")*/}{selectedBooks.map((selBk) => <img src={thumbs[selBk.slice(selBk.search("#")+1).split(")")[0]-1]} className="book-cover-img" alt={selBk} /> )}</div>
 	          </div>
 	          <br/>
 	          <div>
