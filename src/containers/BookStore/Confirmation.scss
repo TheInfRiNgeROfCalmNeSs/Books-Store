@@ -12,8 +12,22 @@
 		min-width: 13%;
 		width: 70%;
 
-		.book-cover-img {
-			margin-right: 10px;
+		.div-book {
+			display: inline-block;
+			.book-cover-img {
+				margin-right: 10px;
+			}
+			.book-title {
+				display: none;
+			}
+			&:hover {
+				.book-title {
+					display: inline-block;
+					position: absolute;
+				    margin-left: -7%;
+				    margin-top: -1.5%;
+				}
+			}
 		}
 	}
 }

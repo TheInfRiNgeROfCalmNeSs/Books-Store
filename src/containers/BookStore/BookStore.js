@@ -5,6 +5,7 @@ import Confirmation from './Confirmation'
 import Success from './Success'
 import BookSearch from './BookSearch'
 import './BookStore.css'
+import defaultImg from "./img/no-book-cover.png"
 
 class BookStore extends PureComponent {
   state = {
@@ -32,7 +33,7 @@ class BookStore extends PureComponent {
 
   componentDidMount() {
     console.log('componentDidMount', this.state.step)
-    if(this.state.step > 1 && this.state.step < 5) {
+    if(/*this.state.step > 1 && this.state.step < 5*/false) {
       this.setState({timerId: setInterval(() => this.setState({timer: this.state.timer - 1}), 1000)})
     }
   }
@@ -45,7 +46,7 @@ class BookStore extends PureComponent {
       localStorage.setItem('step', 1)
     }
     if(this.state.timerId===null && this.state.timer===60*2) {
-      if(this.state.step > 1 && this.state.step < 5) {
+      if(/*this.state.step > 1 && this.state.step < 5*/false) {
         this.setState({timerId: setInterval(() => this.setState({timer: this.state.timer - 1}), 1000)})
       }
     }
@@ -53,7 +54,7 @@ class BookStore extends PureComponent {
       return "triggerdataForNewPage"
     }
     if(this.state.noThumb["yes"]) {
-      document.querySelector(`#checkbox${this.state.noThumb["yes"]}`).nextSibling.firstChild.style.display = "none"
+      //document.querySelector(`#checkbox${this.state.noThumb["yes"]}`).nextSibling.firstChild.style.display = "none"
       return "lets hide loader"
     }
     return null
@@ -119,6 +120,7 @@ class BookStore extends PureComponent {
     const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage, docs, numFound, start, searchCompleted, searching, page, thumbs, noThumb } = formData
     localStorage.setItem('step', error===""?(step!==undefined?step:this.state.step) + 1:this.state.step)
     const newStateBook = []
+    console.log('updateFormData', this.state.noThumb, thumbs)
     this.setState({
       step: parseInt(localStorage.step, 10),
       selectedBooks: selectedBooks && selectedBooks.length>0?selectedBooks:this.state.selectedBooks,
@@ -137,7 +139,7 @@ class BookStore extends PureComponent {
       searchCompleted: searchCompleted!==undefined?searchCompleted:this.state.searchCompleted,
       searching: searching!==undefined?searching:this.state.searching,
       page: page!==undefined?page:this.state.page,
-      thumbs: thumbs!==undefined?Object.assign(this.state.thumbs, thumbs[0]):this.state.thumbs,
+      thumbs: thumbs!==undefined||noThumb!==undefined?Object.assign(this.state.thumbs, noThumb!==undefined?{[noThumb["yes"]]: defaultImg}:thumbs[0]):this.state.thumbs,
       noThumb: noThumb!==undefined?noThumb:this.state.noThumb
     });
   }
