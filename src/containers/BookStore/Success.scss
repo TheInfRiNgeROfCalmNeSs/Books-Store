@@ -1,5 +1,33 @@
 .success-form {
 	h5 {
 		margin: 3% 0;
+		margin-left: 6px;
+		display: inline-block;
+		min-width: 13%;
+		width: 100%;
+		.div-book {
+			display: inline-block;
+			.book-cover-img {
+				margin-right: 10px;
+			}
+			.book-title {
+				display: none;
+			}
+			&:hover {
+				.book-title {
+					display: inline-block;
+					position: absolute;
+					margin-left: -8%;
+					margin-top: -3.5%;
+					background-color: #fff;
+					text-align: center;
+					border: 1px solid #fff;
+					padding: 10px;
+					border-radius: 3px;
+					box-shadow: 0px 0px 11px 0px rgba(0,0,0,0.5);
+					font-weight: 500;
+				}
+			}
+		}
 	}
 }

@@ -26,17 +26,13 @@ const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress,
 	            <div className="margin-left">{/*selectedBooks.join(", ")*/}
 					{
 						selectedBooks.map((selBk) => {
-							const imgSrc = thumbs[selBk.slice(selBk.search("#")+1).split(")")[0]-1]
 							return (
-								imgSrc ?
-									<Fragment>
-										<div className="div-book">
-											<div className="book-title">{selBk}</div>
-											<img src={imgSrc} className="book-cover-img" alt={selBk} />
-										</div>
-									</Fragment>
-								:
-									null
+								<Fragment>
+									<div className="div-book">
+										<div className="book-title">{selBk}</div>
+										<img src={thumbs[selBk.slice(selBk.search("#")+1).split(")")[0]-1]} className="book-cover-img" alt={selBk} />
+									</div>
+								</Fragment>
 							)
 						})
 					}
