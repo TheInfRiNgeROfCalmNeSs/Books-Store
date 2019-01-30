@@ -20,10 +20,17 @@ const DeliveryDetails = ({deliveryOption, updateFormData}) => {
               </label>
             </div>
             <button className="btn btn-success">Submit</button>
+            <button className="btn btn-success go-back" onClick={(e) => goBack(e, updateFormData)}>Go Back</button>
           </form>
         </div>
       </Fragment>
     )
+}
+
+const goBack = (e, updateFormData) => {
+  if(e.target.classList.value.includes("go-back")) {
+    updateFormData({error: "", step: 1})
+  }
 }
 
 const handleChange = (event, updateFormData, deliveryOption) => {

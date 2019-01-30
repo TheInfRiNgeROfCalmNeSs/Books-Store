@@ -17,10 +17,17 @@ const ShippingDetails = ({ updateFormData, error, fullName, contactNumber, shipp
 		</div>
 		<div className="form-group">
 			<button type="submit" className="btn btn-success">Submit</button>
+			<button className="btn btn-success go-back" style={{marginLeft: '1%'}} onClick={(e) => goBack(e, updateFormData)}>Go Back</button>
 		</div>
 		</form>
 	</Fragment>
 )
+
+const goBack = (e, updateFormData) => {
+  if(e.target.classList.value.includes("go-back")) {
+    updateFormData({error: "", step: 0})
+  }
+}
 
 const handleChange = (event, updateFormData, field) => {
 	console.log({[field]: event.target.value})

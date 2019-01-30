@@ -53,7 +53,6 @@ const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress,
 
 const goBack = (e, updateFormData) => {
 	if(e.target.classList.value.includes("go-back")) {
-		console.log('goBack')
 		updateFormData({error: "", step: 2})
 	}
 }
