@@ -5,7 +5,7 @@ import CountUp from 'react-countup';
 import "./BookSearch.scss"
 
 
-const BookSearch = ({ updateFormData, selectedBooks, checkedBooks, docs, error, numFound, start, searchCompleted, searching, showTimeoutMessage, fullName, loading, page, thumbs }) => (
+const BookSearch = ({ updateFormData, selectedBooks, checkedBooks, docs, error, numFound, start, searchCompleted, searching, showTimeoutMessage, fullName, loading, page, thumbs, prevPage, searchTerm }) => (
 	<div className="container">
 		<h3>Search and choose from wide variety of books available in our store</h3>
 		{renderError(error)}
@@ -13,9 +13,9 @@ const BookSearch = ({ updateFormData, selectedBooks, checkedBooks, docs, error, 
 			<div className="row">
 			    <div className="col-lg-12">
 					<div className="input-group">
-						<input type="text" className="form-control" id="search-for-books" placeholder="Search For Books..." />
+						<input type="text" className="form-control" id="search-for-books" defaultValue={searchTerm} placeholder="Search For Books..." />
 						<span className="input-group-btn">
-							<button className="btn btn-default" type="button" onClick={() => performSearch(updateFormData, page, error)}>Go!</button>
+							<button className="btn btn-default" type="button" onClick={() => performSearch(updateFormData, page, error, prevPage, searchTerm)}>Go!</button>
 						</span>
 					</div>
 				</div>
@@ -99,7 +99,7 @@ const renderDocs = (docs, selectedBooks, checkedBooks, fullName, updateFormData,
 	docs.map((doc, ind) => {
 		let startInd = start+1+ind
 		// eslint-disable-next-line
-		return (<tr key={ind} className={checkedBooks[ind]?"selected":null}>
+		return (<tr key={ind} className={checkedBooks[startInd-1]?"selected":null}>
 					<td>
 						<div className="div-after-label">
 							<div className="inner">
@@ -108,14 +108,14 @@ const renderDocs = (docs, selectedBooks, checkedBooks, fullName, updateFormData,
 						</div>
 						<label>
 							<div className="book-number">{startInd}</div>
-							<input type="checkbox" value={`${doc.title} (#${startInd})`} id={`checkbox${ind}`}
+							<input type="checkbox" value={`${doc.title} (#${startInd})`} id={`checkbox${startInd-1}`}
 									// eslint-disable-next-line
-									checked={checkedBooks[ind]}
+									checked={checkedBooks[startInd-1]}
 									onChange={(e) => handleSelectDocs(e, selectedBooks, checkedBooks, updateFormData, doc.isbn?doc.isbn[0]:null)} />
-							<div className={`book-cover${thumbs.hasOwnProperty(ind)?" thumbLoaded":""}`}>
+							<div className={`book-cover${thumbs.hasOwnProperty(startInd-1)?" thumbLoaded":""}`}>
 								{
-									thumbs.hasOwnProperty(ind) ?
-										<img src={thumbs[ind]} className="book-cover-img" alt={doc.title} />
+									thumbs.hasOwnProperty(startInd-1) ?
+										<img src={thumbs[startInd-1]} className="book-cover-img" alt={doc.title} />
 									:
 								        <ClipLoader
 								          sizeUnit={"px"}
@@ -224,7 +224,7 @@ const renderPagination = (updateFormData, page, numFound) => {
 			{
 				pagesArray.map((val, ind) => (
 					<PaginationItem key={ind} active={val===page?true:false} disabled={val==="..."?true:false}>
-						<PaginationLink onClick={(e) => goToPage(e, updateFormData, val)}>
+						<PaginationLink onClick={(e) => goToPage(e, updateFormData, val, page)}>
 							{val}
 						</PaginationLink>
 					</PaginationItem>
@@ -237,19 +237,20 @@ const renderPagination = (updateFormData, page, numFound) => {
 	)
 }
 
-const goToPage = (e, updateFormData, page) => {
-	updateFormData({page: page})
+const goToPage = (e, updateFormData, page, prevPage) => {
+	e.preventDefault()
+	updateFormData({page: page, prevPage: prevPage})
 }
 
-const performSearch = (updateFormData, page, error) => {
-	let searchTerm = document.querySelector("#search-for-books").value
-	if(searchTerm.length === 0) {
+const performSearch = (updateFormData, page, error, prevPage, searchTerm) => {
+	let searchTermVal = document.querySelector("#search-for-books").value
+	if(searchTermVal.length === 0) {
 		error = "Please provide a book name in the field";
-		updateFormData({error: error})
+		updateFormData({error: error, page: prevPage})
 	} else {
 		error = ""
-		openLibrarySearch(searchTerm, updateFormData, page)
-		updateFormData({searchCompleted: false, searching: true})
+		openLibrarySearch(searchTermVal, updateFormData, page)
+		updateFormData({searchCompleted: false, searching: true, searchTerm: searchTermVal})
 	}
 }
 

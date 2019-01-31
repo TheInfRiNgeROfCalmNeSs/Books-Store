@@ -24,9 +24,10 @@ const ShippingDetails = ({ updateFormData, error, fullName, contactNumber, shipp
 )
 
 const goBack = (e, updateFormData) => {
-  if(e.target.classList.value.includes("go-back")) {
-    updateFormData({error: "", step: 0})
-  }
+	e.preventDefault()
+	if(e.target.classList.value.includes("go-back")) {
+		updateFormData({error: "", step: 0})
+	}
 }
 
 const handleChange = (event, updateFormData, field) => {

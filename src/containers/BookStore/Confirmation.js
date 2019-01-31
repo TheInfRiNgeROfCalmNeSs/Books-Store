@@ -25,12 +25,14 @@ const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress,
 	            <strong>Selected books</strong>:
 	            <div className="margin-left">{/*selectedBooks.join(", ")*/}
 					{
-						selectedBooks.map((selBk) => {
+						selectedBooks.map((selBk, index) => {
+							// eslint-disable-next-line
+							let selBkExtr = selBk.match(/\#\d+/g)
 							return (
-								<Fragment>
+								<Fragment key={index}>
 									<div className="div-book">
 										<div className="book-title">{selBk}</div>
-										<img src={thumbs[selBk.slice(selBk.search("#")+1).split(")")[0]-1]} className="book-cover-img" alt={selBk} />
+										<img src={thumbs[selBkExtr.length>1?selBkExtr[1].split("#")[1]-1:selBkExtr[0].split("#")[1]-1]} className="book-cover-img" alt={selBk} />
 									</div>
 								</Fragment>
 							)
@@ -52,6 +54,7 @@ const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress,
 }
 
 const goBack = (e, updateFormData) => {
+	e.preventDefault()
 	if(e.target.classList.value.includes("go-back")) {
 		updateFormData({error: "", step: 2})
 	}

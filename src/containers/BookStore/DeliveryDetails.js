@@ -28,6 +28,7 @@ const DeliveryDetails = ({deliveryOption, updateFormData}) => {
 }
 
 const goBack = (e, updateFormData) => {
+  e.preventDefault()
   if(e.target.classList.value.includes("go-back")) {
     updateFormData({error: "", step: 1})
   }

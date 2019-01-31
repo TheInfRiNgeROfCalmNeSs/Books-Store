@@ -25,6 +25,8 @@ class BookStore extends PureComponent {
     start: 0,
     searchCompleted: false,
     searching: false,
+    searchTerm: "",
+    prevPage: 1,
     page: 1,
     thumbs: {},
     loading: true,
@@ -81,17 +83,17 @@ class BookStore extends PureComponent {
   }
 
   render() {
-    const { selectedBooks, step, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage, searching, searchCompleted, start, numFound, docs, loading, page, thumbs, noThumb, checkedBooks } = this.state
+    const { selectedBooks, step, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage, searching, searchCompleted, start, numFound, docs, loading, page, thumbs, noThumb, checkedBooks, prevPage, searchTerm } = this.state
     let minutes = parseInt(timer/60, 10)
     let seconds = parseInt(timer%60, 10)
     minutes = minutes.toString().length<2?`0${minutes}`:minutes
     seconds = seconds.toString().length<2?`0${seconds}`:seconds
-    console.log('BookStore render: ', 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId, 'searching', searching, 'searchCompleted', searchCompleted, 'start', start, 'numFound', numFound, 'docs', docs, 'page', page, 'thumbs', thumbs, 'noThumb', noThumb, 'checkedBooks', checkedBooks)
+    console.log('BookStore render: ', 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId, 'searching', searching, 'searchCompleted', searchCompleted, 'start', start, 'numFound', numFound, 'docs', docs, 'page', page, 'thumbs', thumbs, 'noThumb', noThumb, 'checkedBooks', checkedBooks, 'prevPage', prevPage, 'searchTerm', searchTerm)
     return (
       <div className="App">
         {
           step === 1 ?
-            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} thumbs={thumbs} checkedBooks={checkedBooks} />
+            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} thumbs={thumbs} checkedBooks={checkedBooks} prevPage={prevPage} searchTerm={searchTerm} />
           :
           step === 2 ?
             <ShippingDetails updateFormData={this.updateFormData} error={error} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress}  />
@@ -121,7 +123,7 @@ class BookStore extends PureComponent {
   }
 
   updateFormData = (formData) => {
-    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage, docs, numFound, start, searchCompleted, searching, page, thumbs, noThumb, checkedBooks } = formData
+    const { step, selectedBooks, error, fullName, contactNumber, shippingAddress, deliveryOption, timer, timerId, showTimeoutMessage, docs, numFound, start, searchCompleted, searching, page, thumbs, noThumb, checkedBooks, prevPage, searchTerm } = formData
     localStorage.setItem('step', error===""?(step!==undefined?step:this.state.step) + 1:this.state.step)
     const newStateBook = []
     //console.log('updateFormData -> checkedBooks', checkedBooks)
@@ -145,7 +147,9 @@ class BookStore extends PureComponent {
       page: page!==undefined?page:this.state.page,
       thumbs: thumbs!==undefined||noThumb!==undefined?Object.assign(this.state.thumbs, noThumb!==undefined?{[noThumb["yes"]]: defaultImg}:thumbs[0]):this.state.thumbs,
       noThumb: noThumb!==undefined?noThumb:this.state.noThumb,
-      checkedBooks: checkedBooks!==undefined?checkedBooks:this.state.checkedBooks
+      checkedBooks: checkedBooks!==undefined?checkedBooks:this.state.checkedBooks,
+      prevPage: prevPage!==undefined?prevPage:this.state.prevPage,
+      searchTerm: searchTerm!==undefined?searchTerm:this.state.searchTerm
     });
   }
 }

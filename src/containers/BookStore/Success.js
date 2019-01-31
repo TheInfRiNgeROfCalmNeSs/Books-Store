@@ -9,11 +9,13 @@ const Success = ({fullName, shippingAddress, selectedBooks, numberOfDays, update
 				<h5>You will soon get {/*selectedBooks.join(", ")*/}
 				{
 					selectedBooks.map((selBk, index) => {
+						// eslint-disable-next-line
+						let selBkExtr = selBk.match(/\#\d+/g)
 						return (
 							<Fragment key={index}>
 								<div className="div-book">
 									<div className="book-title">{selBk}</div>
-									<img src={thumbs[selBk.slice(selBk.search("#")+1).split(")")[0]-1]} className="book-cover-img" alt={selBk} />
+									<img src={thumbs[selBkExtr.length>1?selBkExtr[1].split("#")[1]-1:selBkExtr[0].split("#")[1]-1]} className="book-cover-img" alt={selBk} />
 								</div>
 							</Fragment>
 						)
@@ -27,7 +29,7 @@ const Success = ({fullName, shippingAddress, selectedBooks, numberOfDays, update
 
 const handleSubmit = (event, updateFormData) => {
 	event.preventDefault()
-	localStorage.setItem('step', 1)
+	localStorage.setItem('step', 0)
 	updateFormData({step: 0, error: "", showTimeoutMessage: false})
 }
 
