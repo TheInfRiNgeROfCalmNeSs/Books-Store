@@ -19,8 +19,8 @@ const DeliveryDetails = ({deliveryOption, updateFormData}) => {
                 Normal -- 3-4 days
               </label>
             </div>
-            <button className="btn btn-success">Submit</button>
             <button className="btn btn-success go-back" onClick={(e) => goBack(e, updateFormData)}>Go Back</button>
+            <button className="btn btn-success submit">Submit</button>
           </form>
         </div>
       </Fragment>

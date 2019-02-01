@@ -42,7 +42,7 @@ class BookStore extends PureComponent {
   }
 
   getSnapshotBeforeUpdate(prevProps, prevState) {
-    //console.log('getSnapshotBeforeUpdate -> prevProps:', prevProps, 'prevState:', prevState, 'State:', this.state)
+    console.log('getSnapshotBeforeUpdate -> prevState:', prevState, 'State:', this.state)
     if(this.state && prevState && prevState.timer===1 && this.state.timerId!==null) {
       clearInterval(this.state.timerId)
       this.setState({ step: 1, timerId: null })
@@ -62,6 +62,9 @@ class BookStore extends PureComponent {
     if(this.state.noThumb["yes"]) {
       //document.querySelector(`#checkbox${this.state.noThumb["yes"]}`).nextSibling.firstChild.style.display = "none"
       return "lets hide loader"
+    }
+    if(prevState.searchTerm !== this.state.searchTerm) {
+      this.setState({ thumbs: {} })
     }
     return null
   }
@@ -102,10 +105,10 @@ class BookStore extends PureComponent {
             <DeliveryDetails updateFormData={this.updateFormData} deliveryOption={deliveryOption} />
           :
           step === 4 ?
-            <Confirmation updateFormData={this.updateFormData} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress} selectedBooks={selectedBooks} numberOfDays={deliveryOption === "Normal"?"3 to 4":"1 to 2"} timerId={timerId} thumbs={thumbs} />
+            <Confirmation updateFormData={this.updateFormData} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress} selectedBooks={selectedBooks} numberOfDays={deliveryOption === "Normal"?"3 to 4":"1 to 2"} timerId={timerId} thumbs={thumbs} defaultImg={defaultImg} />
           :
           step === 5 ?
-            <Success updateFormData={this.updateFormData} fullName={fullName} shippingAddress={shippingAddress} selectedBooks={selectedBooks} numberOfDays={deliveryOption === "Normal"?"3 to 4":"1 to 2"} thumbs={thumbs} />
+            <Success updateFormData={this.updateFormData} fullName={fullName} shippingAddress={shippingAddress} selectedBooks={selectedBooks} numberOfDays={deliveryOption === "Normal"?"3 to 4":"1 to 2"} thumbs={thumbs} defaultImg={defaultImg} />
           :
             <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} thumbs={thumbs} />
         }

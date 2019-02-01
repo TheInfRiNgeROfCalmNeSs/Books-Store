@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import './Confirmation.scss';
 
-const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress, selectedBooks, timerId, numberOfDays, thumbs}) => {
+const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress, selectedBooks, timerId, numberOfDays, thumbs, defaultImg}) => {
     return (
 	   	<Fragment>
 	   		<h1>Are you sure you want to submit the data?</h1>
@@ -28,11 +28,12 @@ const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress,
 						selectedBooks.map((selBk, index) => {
 							// eslint-disable-next-line
 							let selBkExtr = selBk.match(/\#\d+/g)
+							let imgSrc = thumbs[selBkExtr.length>1?selBkExtr[1].split("#")[1]-1:selBkExtr[0].split("#")[1]-1]
 							return (
 								<Fragment key={index}>
 									<div className="div-book">
 										<div className="book-title">{selBk}</div>
-										<img src={thumbs[selBkExtr.length>1?selBkExtr[1].split("#")[1]-1:selBkExtr[0].split("#")[1]-1]} className="book-cover-img" alt={selBk} />
+										<img src={imgSrc!==undefined?imgSrc:defaultImg} className="book-cover-img" alt={selBk} />
 									</div>
 								</Fragment>
 							)
@@ -46,8 +47,8 @@ const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress,
 	            <div className="margin-left">{`approximately ${numberOfDays} days`}</div>
 	          </div>
 	          <br/>
-	          <button className="btn btn-success">Place order</button>
 	          <button className="btn btn-success go-back" onClick={(e) => goBack(e, updateFormData)}>Go Back</button>
+	          <button className="btn btn-success place-order">Place order</button>
 	        </form>
 		</Fragment>
     )

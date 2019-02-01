@@ -16,8 +16,8 @@ const ShippingDetails = ({ updateFormData, error, fullName, contactNumber, shipp
 			<input className="form-control" type="text" placeholder="Shipping Address" value={shippingAddress} onChange={(event) => handleChange(event, updateFormData, "shippingAddress")} />
 		</div>
 		<div className="form-group">
-			<button type="submit" className="btn btn-success">Submit</button>
-			<button className="btn btn-success go-back" style={{marginLeft: '1%'}} onClick={(e) => goBack(e, updateFormData)}>Go Back</button>
+			<button className="btn btn-success go-back" onClick={(e) => goBack(e, updateFormData)}>Go Back</button>
+			<button type="submit" style={{marginLeft: '1%'}} className="btn btn-success">Submit</button>
 		</div>
 		</form>
 	</Fragment>

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import './Success.scss';
 
-const Success = ({fullName, shippingAddress, selectedBooks, numberOfDays, updateFormData, thumbs}) => {
+const Success = ({fullName, shippingAddress, selectedBooks, numberOfDays, updateFormData, thumbs, defaultImg}) => {
     return (
 	   	<Fragment>
 			<form className="success-form" onSubmit={(e) => handleSubmit(e, updateFormData)}>
@@ -11,11 +11,12 @@ const Success = ({fullName, shippingAddress, selectedBooks, numberOfDays, update
 					selectedBooks.map((selBk, index) => {
 						// eslint-disable-next-line
 						let selBkExtr = selBk.match(/\#\d+/g)
+						let imgSrc = thumbs[selBkExtr.length>1?selBkExtr[1].split("#")[1]-1:selBkExtr[0].split("#")[1]-1]
 						return (
 							<Fragment key={index}>
 								<div className="div-book">
 									<div className="book-title">{selBk}</div>
-									<img src={thumbs[selBkExtr.length>1?selBkExtr[1].split("#")[1]-1:selBkExtr[0].split("#")[1]-1]} className="book-cover-img" alt={selBk} />
+									<img src={imgSrc!==undefined?imgSrc:defaultImg} className="book-cover-img" alt={selBk} />
 								</div>
 							</Fragment>
 						)
