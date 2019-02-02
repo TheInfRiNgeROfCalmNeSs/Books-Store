@@ -1,10 +1,11 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import ShippingDetails from './ShippingDetails'
 import DeliveryDetails from './DeliveryDetails'
 import Confirmation from './Confirmation'
 import Success from './Success'
+import Parallax from './Parallax'
 import BookSearch from './BookSearch'
-import './BookStore.css'
+import './BookStore.scss'
 import defaultImg from "./img/no-book-cover.png"
 
 class BookStore extends PureComponent {
@@ -93,35 +94,45 @@ class BookStore extends PureComponent {
     seconds = seconds.toString().length<2?`0${seconds}`:seconds
     console.log('BookStore render: ', 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId, 'searching', searching, 'searchCompleted', searchCompleted, 'start', start, 'numFound', numFound, 'docs', docs, 'page', page, 'thumbs', thumbs, 'noThumb', noThumb, 'checkedBooks', checkedBooks, 'prevPage', prevPage, 'searchTerm', searchTerm)
     return (
-      <div className="App">
-        {
-          step === 1 ?
-            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} thumbs={thumbs} checkedBooks={checkedBooks} prevPage={prevPage} searchTerm={searchTerm} />
-          :
-          step === 2 ?
-            <ShippingDetails updateFormData={this.updateFormData} error={error} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress}  />
-          :
-          step === 3 ?
-            <DeliveryDetails updateFormData={this.updateFormData} deliveryOption={deliveryOption} />
-          :
-          step === 4 ?
-            <Confirmation updateFormData={this.updateFormData} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress} selectedBooks={selectedBooks} numberOfDays={deliveryOption === "Normal"?"3 to 4":"1 to 2"} timerId={timerId} thumbs={thumbs} defaultImg={defaultImg} />
-          :
-          step === 5 ?
-            <Success updateFormData={this.updateFormData} fullName={fullName} shippingAddress={shippingAddress} selectedBooks={selectedBooks} numberOfDays={deliveryOption === "Normal"?"3 to 4":"1 to 2"} thumbs={thumbs} defaultImg={defaultImg} />
-          :
-            <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} thumbs={thumbs} />
-        }
-        {
-          this.state.step > 1 && this.state.step < 5 ?
-            <div className="timer">{`You have ${minutes} Minutes, ${seconds} Seconds, before confirming order`}</div>
-          :
-          this.state.step === 1 && this.state.timerId === null && showTimeoutMessage ?
-            <div className="timer-message">{"Your shopping time is out, please try again to confirm your order!"}</div>
-          :
-            null
-        }
-      </div>
+      <Fragment>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <h3>Search and choose from wide variety of books available in our store</h3>
+            </div>
+          </div>
+        </div>
+        <div className="App">
+          {
+            step === 1 ?
+              <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} thumbs={thumbs} checkedBooks={checkedBooks} prevPage={prevPage} searchTerm={searchTerm} />
+            :
+            step === 2 ?
+              <ShippingDetails updateFormData={this.updateFormData} error={error} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress}  />
+            :
+            step === 3 ?
+              <DeliveryDetails updateFormData={this.updateFormData} deliveryOption={deliveryOption} />
+            :
+            step === 4 ?
+              <Confirmation updateFormData={this.updateFormData} fullName={fullName} contactNumber={contactNumber} shippingAddress={shippingAddress} selectedBooks={selectedBooks} numberOfDays={deliveryOption === "Normal"?"3 to 4":"1 to 2"} timerId={timerId} thumbs={thumbs} defaultImg={defaultImg} />
+            :
+            step === 5 ?
+              <Success updateFormData={this.updateFormData} fullName={fullName} shippingAddress={shippingAddress} selectedBooks={selectedBooks} numberOfDays={deliveryOption === "Normal"?"3 to 4":"1 to 2"} thumbs={thumbs} defaultImg={defaultImg} />
+            :
+              <BookSearch updateFormData={this.updateFormData} selectedBooks={selectedBooks} searching={searching} searchCompleted={searchCompleted} error={error} start={start} numFound={numFound} docs={docs} showTimeoutMessage={showTimeoutMessage} fullName={fullName} loading={loading} page={page} thumbs={thumbs} />
+          }
+          {
+            this.state.step > 1 && this.state.step < 5 ?
+              <div className="timer">{`You have ${minutes} Minutes, ${seconds} Seconds, before confirming order`}</div>
+            :
+            this.state.step === 1 && this.state.timerId === null && showTimeoutMessage ?
+              <div className="timer-message">{"Your shopping time is out, please try again to confirm your order!"}</div>
+            :
+              null
+          }
+        </div>
+        <Parallax />
+      </Fragment>
     )
   }
 

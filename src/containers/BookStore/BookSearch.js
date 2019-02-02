@@ -7,7 +7,6 @@ import "./BookSearch.scss"
 
 const BookSearch = ({ updateFormData, selectedBooks, checkedBooks, docs, error, numFound, start, searchCompleted, searching, showTimeoutMessage, fullName, loading, page, thumbs, prevPage, searchTerm }) => (
 	<div className="container">
-		<h3>Search and choose from wide variety of books available in our store</h3>
 		{renderError(error)}
 		<form onSubmit={(e) => handleSubmit(e, updateFormData, selectedBooks, error, showTimeoutMessage)}>
 			<div className="row">
@@ -64,8 +63,8 @@ const renderSearching = (loading) => (
 				{/*<i className="fa fa-spinner fapulse fa-5x"></i>*/}
 		        <ClipLoader
 		          sizeUnit={"px"}
-		          size={120}
-		          color={'mediumvioletred'}
+		          size={150}
+		          color={'white'}
 		          loading={loading}
 		        />
 			</div>

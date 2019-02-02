@@ -1,0 +1,34 @@
+#root {
+	h3 {
+	    line-height: 4;
+	    margin: 0px;
+		text-align: center;
+	}
+	.App {
+	  text-align: left;
+	}
+	.parallax {
+		min-height: 500px;
+		padding: 2rem 0rem;
+	}
+	.second-image,
+	.third-image,
+	.fourth-image,
+	.fifth-image {
+		background-image: url("./img/Hopkins-photo.jpg");
+		min-height: 550px;
+		background-attachment: fixed;
+		background-position: center 50%;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+	.third-image {
+		background-image: url("./img/285473.jpg");
+	}
+	.fourth-image {
+		background-image: url("./img/NY_public_library.jpg");
+	}
+	.fifth-image {
+		background-image: url("./img/1733450.jpg");
+	}
+}
