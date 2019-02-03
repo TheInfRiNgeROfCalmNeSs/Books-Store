@@ -4,7 +4,7 @@ import './DeliveryDetails.scss';
 const DeliveryDetails = ({deliveryOption, updateFormData}) => {
     return (
       <Fragment>
-        <h1>Choose your delivery options here</h1>
+        <h3>Choose your delivery options here</h3>
         <div>
           <form className="delivery-details-form" onSubmit={(e) => handleSubmit(e, updateFormData, deliveryOption)}>
             <div className="radio">

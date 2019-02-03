@@ -64,7 +64,7 @@ const renderSearching = (loading) => (
 		        <ClipLoader
 		          sizeUnit={"px"}
 		          size={150}
-		          color={'white'}
+		          color={'#28a745'}
 		          loading={loading}
 		        />
 			</div>
@@ -218,7 +218,7 @@ const renderPagination = (updateFormData, page, numFound) => {
 	return (
 		<Pagination className="Books-Pagination" size="lg" aria-label="Books Page Navigation">
 			<PaginationItem disabled={page===1?true:false}>
-				<PaginationLink previous />
+				<PaginationLink previous onClick={(e) => goToPage(e, updateFormData, 1, page)} />
 			</PaginationItem>
 			{
 				pagesArray.map((val, ind) => (
@@ -230,7 +230,7 @@ const renderPagination = (updateFormData, page, numFound) => {
 				))
 			}
 			<PaginationItem disabled={page===lastPage?true:false}>
-				<PaginationLink next />
+				<PaginationLink next onClick={(e) => goToPage(e, updateFormData, lastPage, page)} />
 			</PaginationItem>
 		</Pagination>
 	)

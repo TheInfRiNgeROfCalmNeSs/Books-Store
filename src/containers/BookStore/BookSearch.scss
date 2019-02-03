@@ -17,6 +17,9 @@
 
 		.div-spinner {
 			margin-top: 23px;
+			position: fixed;
+			z-index: 1;
+			width: 60%;
 		}
 
 		.input-group {

@@ -5,7 +5,7 @@ const Success = ({fullName, shippingAddress, selectedBooks, numberOfDays, update
     return (
 	   	<Fragment>
 			<form className="success-form" onSubmit={(e) => handleSubmit(e, updateFormData)}>
-				<h2>Thank you for shopping with us {fullName}.</h2>
+				<h3>Thank you for shopping with us {fullName}!</h3>
 				<h5>You will soon get {/*selectedBooks.join(", ")*/}
 				{
 					selectedBooks.map((selBk, index) => {

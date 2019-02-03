@@ -3,6 +3,10 @@
 	    line-height: 4;
 	    margin: 0px;
 		text-align: center;
+		color: white;
+		&.h3-black {
+			color: black;
+		}
 	}
 	.App {
 	  text-align: left;
@@ -31,4 +35,19 @@
 	.fifth-image {
 		background-image: url("./img/17334502.jpg");
 	}
+	.loader-overlay {
+		background-color: rgba(255, 255, 255, .95);
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		z-index: 1;
+	}
 }
+	.modal-time-is-out {
+		max-width: 510px;
+		margin-top: 10%;
+		.btn-primary {
+			margin: 0 auto;
+			width: 100%;
+		}
+	}

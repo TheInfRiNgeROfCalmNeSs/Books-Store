@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 
 const ShippingDetails = ({ updateFormData, error, fullName, contactNumber, shippingAddress }) => (
 	<Fragment>
-		<h3>Enter your shipping information.</h3>
+		<h3>Enter your shipping information</h3>
 		{renderError(error)}
 		<form className="shipping-details-form" onSubmit={(e) => handleSubmit(e, updateFormData, fullName, contactNumber, shippingAddress, validateInput, error)}>
 		<div className="form-group">

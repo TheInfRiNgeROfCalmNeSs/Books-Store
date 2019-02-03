@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
+import { Alert, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ShippingDetails from './ShippingDetails'
 import DeliveryDetails from './DeliveryDetails'
 import Confirmation from './Confirmation'
@@ -32,12 +33,13 @@ class BookStore extends PureComponent {
     thumbs: {},
     loading: true,
     noThumb: {"no": null},
-    checkedBooks: Array(100).fill(false)
+    checkedBooks: Array(100).fill(false),
+    modal: true
   }
 
   componentDidMount() {
     //console.log('componentDidMount', this.state.step)
-    if(/*this.state.step > 1 && this.state.step < 5*/false) {
+    if(this.state.step > 1 && this.state.step < 5) {
       this.setState({timerId: setInterval(() => this.setState({timer: this.state.timer - 1}), 1000)})
     }
   }
@@ -50,7 +52,7 @@ class BookStore extends PureComponent {
       localStorage.setItem('step', 1)
     }
     if(this.state.timerId===null && this.state.timer===60*2) {
-      if(/*this.state.step > 1 && this.state.step < 5*/false) {
+      if(this.state.step > 1 && this.state.step < 5) {
         this.setState({timerId: setInterval(() => this.setState({timer: this.state.timer - 1}), 1000)})
       }
     }
@@ -66,6 +68,9 @@ class BookStore extends PureComponent {
     }
     if(prevState.searchTerm !== this.state.searchTerm) {
       this.setState({ thumbs: {} })
+    }
+    if(this.state.step > 1) {
+      window.scrollTo(0, 0)
     }
     return null
   }
@@ -95,10 +100,16 @@ class BookStore extends PureComponent {
     console.log('BookStore render: ', 'selectedBooks', selectedBooks, 'step', step, 'error', error, 'fullName', fullName, 'contactNumber', contactNumber, 'shippingAddress', shippingAddress, 'deliveryOption', deliveryOption, 'timer', `${minutes}:${seconds}`, 'timerId', timerId, 'searching', searching, 'searchCompleted', searchCompleted, 'start', start, 'numFound', numFound, 'docs', docs, 'page', page, 'thumbs', thumbs, 'noThumb', noThumb, 'checkedBooks', checkedBooks, 'prevPage', prevPage, 'searchTerm', searchTerm)
     return (
       <Fragment>
+        {
+          searching ?
+            <div className="loader-overlay"></div>
+          :
+            null
+        }
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
-              <h3>Search and choose from wide variety of books available in our store</h3>
+              <h3 className="h3-black">Search and choose from wide variety of books available in our store</h3>
             </div>
           </div>
         </div>
@@ -123,10 +134,16 @@ class BookStore extends PureComponent {
           }
           {
             this.state.step > 1 && this.state.step < 5 ?
-              <div className="timer">{`You have ${minutes} Minutes, ${seconds} Seconds, before confirming order`}</div>
+              <Alert color="warning">{`You have ${minutes} Minutes, ${seconds} Seconds, before confirming order`}</Alert>
             :
             this.state.step === 1 && this.state.timerId === null && showTimeoutMessage ?
-              <div className="timer-message">{"Your shopping time is out, please try again to confirm your order!"}</div>
+              <Modal isOpen={this.state.modal} toggle={this.toggle} backdrop={this.state.modal} className="modal-time-is-out">
+                <ModalHeader>Time Is Out</ModalHeader>
+                <ModalBody>Your shopping time is out, please try again to confirm your order!</ModalBody>
+                <ModalFooter>
+                  <Button color="primary" onClick={this.toggle}>OK</Button>
+                </ModalFooter>
+              </Modal>
             :
               null
           }
@@ -166,6 +183,13 @@ class BookStore extends PureComponent {
       searchTerm: searchTerm!==undefined?searchTerm:this.state.searchTerm
     });
   }
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
 }
 
 export default BookStore;

@@ -4,7 +4,7 @@ import './Confirmation.scss';
 const Confirmation = ({updateFormData, fullName, contactNumber, shippingAddress, selectedBooks, timerId, numberOfDays, thumbs, defaultImg}) => {
     return (
 	   	<Fragment>
-	   		<h1>Are you sure you want to submit the data?</h1>
+			<h3>Are you sure you want to submit the data?</h3>
 			<form className="confirmation-form" onSubmit={(e) => handleSubmit(e, updateFormData, fullName, contactNumber, shippingAddress, selectedBooks, timerId)}>
 	          <div>
 	            <strong>Full Name</strong>:
