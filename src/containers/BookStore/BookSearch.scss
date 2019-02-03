@@ -35,6 +35,15 @@
 			}
 		}
 
+		.alert-danger {
+		    position: fixed;
+		    z-index: 1;
+		    width: 62%;
+		    top: 30px;
+		    text-align: center;
+		    margin: 0 auto;
+		}
+
 		#bookSearchTable {
 			border-collapse: collapse;
 			tr {
