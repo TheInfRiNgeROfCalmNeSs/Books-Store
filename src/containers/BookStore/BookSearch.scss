@@ -47,6 +47,15 @@
 		    margin: 0 auto;
 		}
 
+		.vertical-pagination {
+		    display: inline-block;
+		    color: white;
+		    background-color: red;
+			position: fixed;
+			top: 100px;
+			right: 30px;
+		}
+
 		#bookSearchTable {
 			border-collapse: collapse;
 			tr {
@@ -218,6 +227,30 @@
 		    position: fixed;
 		    bottom: -6px;
 			z-index: 1;
+		}
+
+		.Books-Vertical-Pagination {
+			position: fixed;
+			top: 180px;
+			right: 20px;
+			.pagination {
+				flex-direction: column;
+				.page-item {
+					&:first-child {
+						.page-link {
+							left: -1px;
+							border-top-right-radius: 0.3rem;
+							border-bottom-left-radius: 0;
+						}
+					}
+					&:last-child {
+						.page-link {
+							border-top-right-radius: 0;
+							border-bottom-left-radius: 0.3rem;
+						}
+					}
+				}
+			}
 		}
 	}
 }

@@ -5,10 +5,10 @@ import CountUp from 'react-countup';
 import "./BookSearch.scss"
 
 
-const BookSearch = ({ updateFormData, selectedBooks, checkedBooks, docs, error, numFound, start, searchCompleted, searching, showTimeoutMessage, fullName, loading, page, thumbs, prevPage, searchTerm }) => (
+const BookSearch = ({ updateFormData, selectedBooks, checkedBooks, docs, error, numFound, start, searchCompleted, searching, fullName, loading, page, thumbs, prevPage, searchTerm, verticalPage }) => (
 	<div className="container">
 		{renderError(error)}
-		<form onSubmit={(e) => handleSubmit(e, updateFormData, selectedBooks, error, showTimeoutMessage)}>
+		<form onSubmit={(e) => handleSubmit(e, updateFormData, selectedBooks, error)}>
 			<div className="row">
 			    <div className="col-lg-12">
 					<div className="input-group">
@@ -33,6 +33,13 @@ const BookSearch = ({ updateFormData, selectedBooks, checkedBooks, docs, error, 
 			    <div className="col-lg-12">
 					<div className="text-center">
 						{searchCompleted?renderPagination(updateFormData, page, numFound):null}
+					</div>
+				</div>
+			</div>
+			<div className="row">
+			    <div className="col-lg-12">
+					<div className="text-center">
+						{searchCompleted?renderVerticalPagination(verticalPage, updateFormData):null}
 					</div>
 				</div>
 			</div>
@@ -236,6 +243,27 @@ const renderPagination = (updateFormData, page, numFound) => {
 	)
 }
 
+const renderVerticalPagination = (verticalPage, updateFormData) => (
+	<Pagination className="Books-Vertical-Pagination" size="lg" aria-label="Books Page Vertical Navigation">
+		{
+			[10, 20, 30, 40, 50, 60, 70, 80, 90].map((val, ind) => (
+				<PaginationItem key={ind} active={verticalPage===val?true:false} disabled={false}>
+					<PaginationLink onClick={(e) => clickVertical(e, val, updateFormData)}>
+						{val}
+					</PaginationLink>
+				</PaginationItem>
+			))
+		}
+	</Pagination>
+)
+
+const clickVertical = (e, decimal, updateFormData) => {
+	e.preventDefault()
+	window.scrollTo({ left: 0, top: 366+(181*(decimal-1)), behavior: 'smooth' })	// 10, 20, 30, 40, 50, 60, 70, 80, 90
+	console.log('scrollTo 2', decimal)
+	updateFormData({verticalPage: parseInt(e.target.innerText, 10)})
+}
+
 const goToPage = (e, updateFormData, page, prevPage) => {
 	e.preventDefault()
 	updateFormData({page: page, prevPage: prevPage})
@@ -269,14 +297,14 @@ const openLibrarySearch = (searchTerm, updateFormData, page) => {
 
 }
 
-const handleSubmit = (event, updateFormData, selectedBooks, error, showTimeoutMessage) => {
+const handleSubmit = (event, updateFormData, selectedBooks, error) => {
 	event.preventDefault()
 	if(selectedBooks.length === 0) {
 	  error = "Please choose at least one book to continue";
 	} else {
 	  error = ""
 	}
-	updateFormData({selectedBooks: selectedBooks, error: error, showTimeoutMessage: error!==""?false:true})
+	updateFormData({selectedBooks: selectedBooks, error: error})
 }
 
 export default BookSearch
